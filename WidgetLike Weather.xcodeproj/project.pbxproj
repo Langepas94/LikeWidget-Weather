@@ -12,6 +12,9 @@
 		443E423429ADF55A0046091B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E423329ADF55A0046091B /* ViewController.swift */; };
 		443E423929ADF55A0046091B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 443E423829ADF55A0046091B /* Assets.xcassets */; };
 		443E423C29ADF55A0046091B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 443E423A29ADF55A0046091B /* LaunchScreen.storyboard */; };
+		443E424729ADF8600046091B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 443E424629ADF8600046091B /* SnapKit */; };
+		443E424C29ADF8860046091B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 443E424B29ADF8860046091B /* Alamofire */; };
+		443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E424E29ADF9190046091B /* UIcolor + extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,7 @@
 		443E423829ADF55A0046091B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		443E423B29ADF55A0046091B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		443E423D29ADF55A0046091B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		443E424E29ADF9190046091B /* UIcolor + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIcolor + extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +33,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				443E424C29ADF8860046091B /* Alamofire in Frameworks */,
+				443E424729ADF8600046091B /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,14 +60,39 @@
 		443E422E29ADF55A0046091B /* WidgetLike Weather */ = {
 			isa = PBXGroup;
 			children = (
-				443E422F29ADF55A0046091B /* AppDelegate.swift */,
-				443E423129ADF55A0046091B /* SceneDelegate.swift */,
-				443E423329ADF55A0046091B /* ViewController.swift */,
-				443E423829ADF55A0046091B /* Assets.xcassets */,
-				443E423A29ADF55A0046091B /* LaunchScreen.storyboard */,
+				443E424D29ADF90A0046091B /* Extensions */,
+				443E424429ADF8400046091B /* Main Screen */,
+				443E424329ADF8000046091B /* App files */,
 				443E423D29ADF55A0046091B /* Info.plist */,
 			);
 			path = "WidgetLike Weather";
+			sourceTree = "<group>";
+		};
+		443E424329ADF8000046091B /* App files */ = {
+			isa = PBXGroup;
+			children = (
+				443E423829ADF55A0046091B /* Assets.xcassets */,
+				443E422F29ADF55A0046091B /* AppDelegate.swift */,
+				443E423129ADF55A0046091B /* SceneDelegate.swift */,
+				443E423A29ADF55A0046091B /* LaunchScreen.storyboard */,
+			);
+			path = "App files";
+			sourceTree = "<group>";
+		};
+		443E424429ADF8400046091B /* Main Screen */ = {
+			isa = PBXGroup;
+			children = (
+				443E423329ADF55A0046091B /* ViewController.swift */,
+			);
+			path = "Main Screen";
+			sourceTree = "<group>";
+		};
+		443E424D29ADF90A0046091B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				443E424E29ADF9190046091B /* UIcolor + extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,6 +111,10 @@
 			dependencies = (
 			);
 			name = "WidgetLike Weather";
+			packageProductDependencies = (
+				443E424629ADF8600046091B /* SnapKit */,
+				443E424B29ADF8860046091B /* Alamofire */,
+			);
 			productName = "WidgetLike Weather";
 			productReference = 443E422C29ADF55A0046091B /* WidgetLike Weather.app */;
 			productType = "com.apple.product-type.application";
@@ -108,6 +143,10 @@
 				Base,
 			);
 			mainGroup = 443E422329ADF55A0046091B;
+			packageReferences = (
+				443E424529ADF8600046091B /* XCRemoteSwiftPackageReference "SnapKit" */,
+				443E424A29ADF8860046091B /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 443E422D29ADF55A0046091B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -135,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				443E423429ADF55A0046091B /* ViewController.swift in Sources */,
+				443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */,
 				443E423029ADF55A0046091B /* AppDelegate.swift in Sources */,
 				443E423229ADF55A0046091B /* SceneDelegate.swift in Sources */,
 			);
@@ -344,6 +384,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		443E424529ADF8600046091B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit?ysclid=lefpxb0ocd537749091";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+		443E424A29ADF8860046091B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire?ysclid=leo0h5dbj3719898344";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		443E424629ADF8600046091B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 443E424529ADF8600046091B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		443E424B29ADF8860046091B /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 443E424A29ADF8860046091B /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 443E422429ADF55A0046091B /* Project object */;
 }
