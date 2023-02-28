@@ -36,8 +36,9 @@ class ViewController: UIViewController {
     // MARK: - mainLayoutSection()
     private func mainLayoutSection() -> NSCollectionLayoutSection {
 
-       let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
-                                             heightDimension: .fractionalWidth(0.5))
+       let itemSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(0.5),
+        heightDimension: .fractionalWidth(0.5))
 
        let item = NSCollectionLayoutItem(layoutSize: itemSize)
     item.contentInsets = .init(top: 0, leading: 0, bottom: 15, trailing: 15)
@@ -82,7 +83,7 @@ extension ViewController: UICollectionViewDataSource {
         
         
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
-        
+        cell.configure(city: "Langepas", degrees: "20")
         return cell
     }
     

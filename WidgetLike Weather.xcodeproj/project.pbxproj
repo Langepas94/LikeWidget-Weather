@@ -62,6 +62,7 @@
 		443E422E29ADF55A0046091B /* WidgetLike Weather */ = {
 			isa = PBXGroup;
 			children = (
+				443E425329AE2BEB0046091B /* New Group */,
 				443E425029AE0EB40046091B /* Model */,
 				443E424D29ADF90A0046091B /* Extensions */,
 				443E424429ADF8400046091B /* Main Screen */,
@@ -104,6 +105,13 @@
 				443E425129AE0EBF0046091B /* WeatherCell.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		443E425329AE2BEB0046091B /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
