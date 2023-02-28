@@ -15,6 +15,7 @@
 		443E424729ADF8600046091B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 443E424629ADF8600046091B /* SnapKit */; };
 		443E424C29ADF8860046091B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 443E424B29ADF8860046091B /* Alamofire */; };
 		443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E424E29ADF9190046091B /* UIcolor + extension.swift */; };
+		443E425229AE0EBF0046091B /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425129AE0EBF0046091B /* WeatherCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		443E423B29ADF55A0046091B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		443E423D29ADF55A0046091B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		443E424E29ADF9190046091B /* UIcolor + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIcolor + extension.swift"; sourceTree = "<group>"; };
+		443E425129AE0EBF0046091B /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		443E422E29ADF55A0046091B /* WidgetLike Weather */ = {
 			isa = PBXGroup;
 			children = (
+				443E425029AE0EB40046091B /* Model */,
 				443E424D29ADF90A0046091B /* Extensions */,
 				443E424429ADF8400046091B /* Main Screen */,
 				443E424329ADF8000046091B /* App files */,
@@ -93,6 +96,14 @@
 				443E424E29ADF9190046091B /* UIcolor + extension.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		443E425029AE0EB40046091B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				443E425129AE0EBF0046091B /* WeatherCell.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,6 +186,7 @@
 			files = (
 				443E423429ADF55A0046091B /* ViewController.swift in Sources */,
 				443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */,
+				443E425229AE0EBF0046091B /* WeatherCell.swift in Sources */,
 				443E423029ADF55A0046091B /* AppDelegate.swift in Sources */,
 				443E423229ADF55A0046091B /* SceneDelegate.swift in Sources */,
 			);

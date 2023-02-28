@@ -15,7 +15,8 @@ class ViewController: UIViewController {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "id")
+        collection.register(WeatherCell.self, forCellWithReuseIdentifier: WeatherCell.cellId)
+        collection.showsVerticalScrollIndicator = false
         return collection
     }()
     
@@ -30,14 +31,7 @@ class ViewController: UIViewController {
     // MARK: - createCompositionalLayout()
     private func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
 
-        return UICollectionViewCompositionalLayout { (sectionNumber, env) -> NSCollectionLayoutSection? in
-
-         switch sectionNumber {
-
-         case 0: return self.mainLayoutSection()
-         default: return self.mainLayoutSection()
-         }
-       }
+       return UICollectionViewCompositionalLayout(section: mainLayoutSection())
     }
     // MARK: - mainLayoutSection()
     private func mainLayoutSection() -> NSCollectionLayoutSection {
@@ -69,7 +63,7 @@ class ViewController: UIViewController {
 // MARK: - setupUI func
 extension ViewController {
     func setupUI() {
-        view.backgroundColor = .backColor
+        mainCollection.backgroundColor = .backColor
         view.addSubview(mainCollection)
         
         mainCollection.snp.makeConstraints { make in
@@ -81,12 +75,14 @@ extension ViewController {
 // MARK: - UICollectionViewDataSource()
 extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        11
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath)
-        cell.backgroundColor = .red
+        
+        
+        let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
+        
         return cell
     }
     
