@@ -20,7 +20,8 @@ class ViewController: UIViewController {
         return collection
     }()
     
-
+    var testMassiv = ["London", "Langepas", "Moscow", "Ufa", "York", "Volgograd"]
+    private var network = NetworkManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,14 +77,38 @@ extension ViewController {
 // MARK: - UICollectionViewDataSource()
 extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        11
+        testMassiv.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        
+        var index = testMassiv[indexPath.row]
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
-        cell.configure(city: "Langepas", degrees: "20")
+        
+        
+        DispatchQueue.main.async {
+            
+              
+//            cell.configure(city: index , degrees: "20")
+            
+            cell.layer.shadowColor = UIColor.white.withAlphaComponent(0.2).cgColor
+            cell.layer.shadowOffset = CGSize(width: 100, height: 100)
+            cell.layer.shadowOpacity = 1
+            
+            
+                self.network.fetchData(requestType: .city(city: index)) { [weak self] result in
+                    switch result {
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            cell.configure(city: (data.city?.name)!, degrees: String( (data.list![0].main?.temp)!))
+                        }
+                    case .failure(_):
+                        print("mem")
+                    }
+                }
+            
+        }
+        
         return cell
     }
     

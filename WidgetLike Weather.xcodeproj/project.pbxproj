@@ -16,6 +16,9 @@
 		443E424C29ADF8860046091B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 443E424B29ADF8860046091B /* Alamofire */; };
 		443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E424E29ADF9190046091B /* UIcolor + extension.swift */; };
 		443E425229AE0EBF0046091B /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425129AE0EBF0046091B /* WeatherCell.swift */; };
+		443E425529AE2C210046091B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425429AE2C210046091B /* NetworkManager.swift */; };
+		443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425629AE2C2A0046091B /* WeatherDataModel.swift */; };
+		443E425929AE2CB60046091B /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425829AE2CB60046091B /* ApiKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		443E423D29ADF55A0046091B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		443E424E29ADF9190046091B /* UIcolor + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIcolor + extension.swift"; sourceTree = "<group>"; };
 		443E425129AE0EBF0046091B /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
+		443E425429AE2C210046091B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		443E425629AE2C2A0046091B /* WeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataModel.swift; sourceTree = "<group>"; };
+		443E425829AE2CB60046091B /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +68,7 @@
 		443E422E29ADF55A0046091B /* WidgetLike Weather */ = {
 			isa = PBXGroup;
 			children = (
-				443E425329AE2BEB0046091B /* New Group */,
+				443E425329AE2BEB0046091B /* Networking */,
 				443E425029AE0EB40046091B /* Model */,
 				443E424D29ADF90A0046091B /* Extensions */,
 				443E424429ADF8400046091B /* Main Screen */,
@@ -107,11 +113,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		443E425329AE2BEB0046091B /* New Group */ = {
+		443E425329AE2BEB0046091B /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				443E425429AE2C210046091B /* NetworkManager.swift */,
+				443E425629AE2C2A0046091B /* WeatherDataModel.swift */,
+				443E425829AE2CB60046091B /* ApiKey.swift */,
 			);
-			path = "New Group";
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,7 +201,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				443E425529AE2C210046091B /* NetworkManager.swift in Sources */,
 				443E423429ADF55A0046091B /* ViewController.swift in Sources */,
+				443E425929AE2CB60046091B /* ApiKey.swift in Sources */,
+				443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */,
 				443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */,
 				443E425229AE0EBF0046091B /* WeatherCell.swift in Sources */,
 				443E423029ADF55A0046091B /* AppDelegate.swift in Sources */,
