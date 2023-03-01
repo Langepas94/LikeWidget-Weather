@@ -17,7 +17,7 @@ class WeatherCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont(name: "Avenir-Medium", size: 21)
+        label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 21)
         
         return label
     }()
@@ -26,7 +26,7 @@ class WeatherCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont(name: "Avenir-Medium", size: 37)
+        label.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 37)
         return label
     }()
     
@@ -42,7 +42,7 @@ class WeatherCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont(name: "Avenir-Book", size: 13)
+        label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
         return label
     }()
     
@@ -50,7 +50,7 @@ class WeatherCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = UIFont(name: "Avenir-Book", size: 13)
+        label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
         return label
     }()
     

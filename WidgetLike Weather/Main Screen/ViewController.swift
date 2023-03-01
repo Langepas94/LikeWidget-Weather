@@ -86,7 +86,7 @@ extension ViewController: UICollectionViewDataSource {
         
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
         
-// MARK: - c
+// MARK: - neuromorph design
         let lightShadow = CALayer()
         lightShadow.frame = cell.bounds
         lightShadow.backgroundColor = UIColor.white.cgColor
