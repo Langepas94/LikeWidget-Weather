@@ -57,6 +57,7 @@ class WeatherCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
+
         
     }
     
@@ -75,7 +76,7 @@ class WeatherCell: UICollectionViewCell {
 // MARK: - setupView
 extension WeatherCell {
     func setupView() {
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .backColor
         contentView.layer.cornerRadius = 20
         
         contentView.addSubview(cityNameLabel)

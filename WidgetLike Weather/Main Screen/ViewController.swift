@@ -83,18 +83,35 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         var index = testMassiv[indexPath.row]
+        
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
+        
+// MARK: - c
+        let lightShadow = CALayer()
+        lightShadow.frame = cell.bounds
+        lightShadow.backgroundColor = UIColor.white.cgColor
+        lightShadow.shadowColor = UIColor.white.withAlphaComponent(0.9).cgColor
+        lightShadow.shadowRadius = 5
+        lightShadow.cornerRadius = 20
+        lightShadow.shadowOffset = CGSize(width: -5, height: -5)
+        lightShadow.shadowOpacity = 1
+        
+        
+        let darkShadow = CALayer()
+        darkShadow.frame = cell.bounds
+        darkShadow.backgroundColor = UIColor.white.cgColor
+        darkShadow.shadowRadius = 5
+        darkShadow.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
+        darkShadow.cornerRadius = 20
+        darkShadow.shadowOffset = CGSize(width: 10, height: 10)
+        darkShadow.shadowOpacity = 1
+
+        cell.layer.insertSublayer(darkShadow, at: 0)
+        cell.layer.insertSublayer(lightShadow, at: 0)
+
         
         
         DispatchQueue.main.async {
-            
-              
-//            cell.configure(city: index , degrees: "20")
-            
-            cell.layer.shadowColor = UIColor.white.withAlphaComponent(0.2).cgColor
-            cell.layer.shadowOffset = CGSize(width: 100, height: 100)
-            cell.layer.shadowOpacity = 1
-            
             
                 self.network.fetchData(requestType: .city(city: index)) { [weak self] result in
                     switch result {

@@ -69,7 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				443E425329AE2BEB0046091B /* Networking */,
-				443E425029AE0EB40046091B /* Model */,
+				443E425029AE0EB40046091B /* CustomCell */,
 				443E424D29ADF90A0046091B /* Extensions */,
 				443E424429ADF8400046091B /* Main Screen */,
 				443E424329ADF8000046091B /* App files */,
@@ -105,22 +105,30 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		443E425029AE0EB40046091B /* Model */ = {
+		443E425029AE0EB40046091B /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
 				443E425129AE0EBF0046091B /* WeatherCell.swift */,
 			);
-			path = Model;
+			path = CustomCell;
 			sourceTree = "<group>";
 		};
 		443E425329AE2BEB0046091B /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				443E425C29AF4D8D0046091B /* Model */,
 				443E425429AE2C210046091B /* NetworkManager.swift */,
-				443E425629AE2C2A0046091B /* WeatherDataModel.swift */,
 				443E425829AE2CB60046091B /* ApiKey.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		443E425C29AF4D8D0046091B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				443E425629AE2C2A0046091B /* WeatherDataModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
