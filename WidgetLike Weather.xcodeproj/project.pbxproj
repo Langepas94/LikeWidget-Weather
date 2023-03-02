@@ -19,6 +19,7 @@
 		443E425529AE2C210046091B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425429AE2C210046091B /* NetworkManager.swift */; };
 		443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425629AE2C2A0046091B /* WeatherDataModel.swift */; };
 		443E425929AE2CB60046091B /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425829AE2CB60046091B /* ApiKey.swift */; };
+		443E425E29B089A50046091B /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425D29B089A50046091B /* HeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		443E425429AE2C210046091B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		443E425629AE2C2A0046091B /* WeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataModel.swift; sourceTree = "<group>"; };
 		443E425829AE2CB60046091B /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = "<group>"; };
+		443E425D29B089A50046091B /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				443E423329ADF55A0046091B /* ViewController.swift */,
+				443E425D29B089A50046091B /* HeaderView.swift */,
 			);
 			path = "Main Screen";
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				443E425529AE2C210046091B /* NetworkManager.swift in Sources */,
+				443E425E29B089A50046091B /* HeaderView.swift in Sources */,
 				443E423429ADF55A0046091B /* ViewController.swift in Sources */,
 				443E425929AE2CB60046091B /* ApiKey.swift in Sources */,
 				443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */,
