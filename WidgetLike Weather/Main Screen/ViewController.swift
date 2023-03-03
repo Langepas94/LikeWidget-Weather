@@ -24,15 +24,13 @@ class ViewController: UIViewController {
         return collection
     }()
     
-    
-    
     var testMassiv = ["London", "Langepas", "Moscow", "Ufa", "York", "Volgograd"]
+    
     private var network = NetworkManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        
     }
     
     // MARK: - createCompositionalLayout()
@@ -69,10 +67,7 @@ class ViewController: UIViewController {
         
         return section
     }
-    
-    // MARK: - add header
-    
-    
+
     
 }
 // MARK: - setupUI func
