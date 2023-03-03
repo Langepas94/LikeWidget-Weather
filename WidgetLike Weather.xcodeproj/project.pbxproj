@@ -20,6 +20,7 @@
 		443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425629AE2C2A0046091B /* WeatherDataModel.swift */; };
 		443E425929AE2CB60046091B /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425829AE2CB60046091B /* ApiKey.swift */; };
 		443E425E29B089A50046091B /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425D29B089A50046091B /* HeaderView.swift */; };
+		44DFAAF629B1DBE3004E408D /* city.list.json in Resources */ = {isa = PBXBuildFile; fileRef = 44DFAAF529B1DBE3004E408D /* city.list.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		443E425629AE2C2A0046091B /* WeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataModel.swift; sourceTree = "<group>"; };
 		443E425829AE2CB60046091B /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = "<group>"; };
 		443E425D29B089A50046091B /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		44DFAAF529B1DBE3004E408D /* city.list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = city.list.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 		443E425329AE2BEB0046091B /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				44DFAAF429B1DBC9004E408D /* Cities list */,
 				443E425C29AF4D8D0046091B /* Model */,
 				443E425429AE2C210046091B /* NetworkManager.swift */,
 				443E425829AE2CB60046091B /* ApiKey.swift */,
@@ -132,6 +135,14 @@
 				443E425629AE2C2A0046091B /* WeatherDataModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		44DFAAF429B1DBC9004E408D /* Cities list */ = {
+			isa = PBXGroup;
+			children = (
+				44DFAAF529B1DBE3004E408D /* city.list.json */,
+			);
+			path = "Cities list";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +213,7 @@
 			files = (
 				443E423C29ADF55A0046091B /* LaunchScreen.storyboard in Resources */,
 				443E423929ADF55A0046091B /* Assets.xcassets in Resources */,
+				44DFAAF629B1DBE3004E408D /* city.list.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,11 +10,13 @@ import UIKit
 import SnapKit
 
 
-class HeaderView: UICollectionReusableView {
+final class HeaderView: UICollectionReusableView {
     
     static let reuseId = "Header"
     
-    let searchBar = UISearchBar()
+    private let searchBar = UISearchBar()
+    
+    private let settingsButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -26,9 +28,9 @@ class HeaderView: UICollectionReusableView {
     
     private func setupSearchBar() {
         addSubview(searchBar)
-     
+        searchBar.delegate = self
         searchBar.barTintColor = .backColor
-        searchBar.tintColor = .clear
+        searchBar.tintColor = .black
         searchBar.layer.borderWidth = 1
         searchBar.layer.borderColor = UIColor.backColor?.cgColor
         searchBar.snp.makeConstraints { make in
@@ -42,4 +44,8 @@ class HeaderView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension HeaderView: UISearchBarDelegate {
+    
 }

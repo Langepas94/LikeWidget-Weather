@@ -11,7 +11,7 @@ import Foundation
 
 struct WeatherDataModel: Codable {
     let cod: String?
-    let message, cnt: Int?
+    let message, cnt: Int?    // cnt - A number of days, which will be returned in the API response
     let list: [List]?
     let city: City?
 }

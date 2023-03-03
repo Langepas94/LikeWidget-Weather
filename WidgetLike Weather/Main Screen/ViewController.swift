@@ -19,7 +19,6 @@ class ViewController: UIViewController {
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(WeatherCell.self, forCellWithReuseIdentifier: WeatherCell.cellId)
         collection.showsVerticalScrollIndicator = false
-       
         collection.register(HeaderView.self, forSupplementaryViewOfKind: categoryHeaderId, withReuseIdentifier: HeaderView.reuseId)
         
         return collection
@@ -49,15 +48,15 @@ class ViewController: UIViewController {
             heightDimension: .fractionalWidth(0.5))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 10, leading: 7, bottom: 15, trailing: 7)
+        item.contentInsets = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(500))
+                                               heightDimension: .fractionalWidth(0.5))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-//        section.contentInsets.leading = 15
+
         
         
         
@@ -96,11 +95,9 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.reuseId, for: indexPath)
-        
-       
-        
         return sectionHeader
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         testMassiv.count
@@ -116,7 +113,7 @@ extension ViewController: UICollectionViewDataSource {
         let lightShadow = CALayer()
         lightShadow.frame = cell.bounds
         lightShadow.backgroundColor = UIColor.white.cgColor
-        lightShadow.shadowColor = UIColor.white.withAlphaComponent(0.9).cgColor
+        lightShadow.shadowColor = UIColor.white.withAlphaComponent(0.6).cgColor
         lightShadow.shadowRadius = 5
         lightShadow.cornerRadius = 20
         lightShadow.shadowOffset = CGSize(width: -5, height: -5)
