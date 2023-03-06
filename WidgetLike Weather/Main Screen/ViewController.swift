@@ -10,16 +10,15 @@ import SnapKit
 
 class ViewController: UIViewController {
     
-    let categoryHeaderId = "categoryHeaderId"
-    
     // MARK: - elements of view
+    private let searchController = UISearchController(searchResultsController: ResultVc())
+    
     private lazy var mainCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(WeatherCell.self, forCellWithReuseIdentifier: WeatherCell.cellId)
         collection.showsVerticalScrollIndicator = false
-        collection.register(HeaderView.self, forSupplementaryViewOfKind: categoryHeaderId, withReuseIdentifier: HeaderView.reuseId)
         
         return collection
     }()
@@ -31,6 +30,12 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "Widget Weather"
+        
+        searchController.searchBar.placeholder = "add your city"
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
     }
     
     // MARK: - createCompositionalLayout()
@@ -54,20 +59,10 @@ class ViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-
-        
-        
-        
-        
-        section.boundarySupplementaryItems = [
-            NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension:
-                    .fractionalWidth(1), heightDimension: .estimated(1)), elementKind: categoryHeaderId, alignment:
-                    .top)
-        ]
         
         return section
     }
-
+    
     
 }
 // MARK: - setupUI func
@@ -86,7 +81,7 @@ extension ViewController {
 extension ViewController: UICollectionViewDataSource {
     
     
-// MARK: - Header of collection
+    // MARK: - Header of collection
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.reuseId, for: indexPath)
@@ -108,7 +103,7 @@ extension ViewController: UICollectionViewDataSource {
         let lightShadow = CALayer()
         lightShadow.frame = cell.bounds
         lightShadow.backgroundColor = UIColor.white.cgColor
-        lightShadow.shadowColor = UIColor.white.withAlphaComponent(0.6).cgColor
+        lightShadow.shadowColor = UIColor.white.withAlphaComponent(0.4).cgColor
         lightShadow.shadowRadius = 5
         lightShadow.cornerRadius = 20
         lightShadow.shadowOffset = CGSize(width: -5, height: -5)
@@ -126,8 +121,6 @@ extension ViewController: UICollectionViewDataSource {
         
         cell.layer.insertSublayer(darkShadow, at: 0)
         cell.layer.insertSublayer(lightShadow, at: 0)
-        
-        
         
         DispatchQueue.main.async {
             
@@ -148,4 +141,13 @@ extension ViewController: UICollectionViewDataSource {
     }
     
     
+}
+
+extension ViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        let vc = searchController.searchResultsController as? ResultVc
+        vc?.view.backgroundColor = .yellow
+        print(text)
+    }
 }
