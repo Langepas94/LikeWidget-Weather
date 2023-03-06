@@ -50,10 +50,10 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
                 
                 switch result {
                 case .success(let data):
-                    self?.massa = data
+                    
                     DispatchQueue.main.async {
                         
-                        config.text = self?.massa![indexPath.row].name
+                        config.text = data[indexPath.row].name
                         cell.contentConfiguration = config
                         print()
                     }
