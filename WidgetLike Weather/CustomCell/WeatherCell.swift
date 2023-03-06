@@ -76,7 +76,7 @@ class WeatherCell: UICollectionViewCell {
 // MARK: - setupView
 extension WeatherCell {
     func setupView() {
-        contentView.backgroundColor = .backColor
+        contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 20
         
         contentView.addSubview(cityNameLabel)

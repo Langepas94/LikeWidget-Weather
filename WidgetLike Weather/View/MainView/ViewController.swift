@@ -70,7 +70,6 @@ extension ViewController {
     func setupUI() {
         mainCollection.backgroundColor = .backColor
         view.addSubview(mainCollection)
-        
         mainCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -79,15 +78,6 @@ extension ViewController {
 
 // MARK: - UICollectionViewDataSource()
 extension ViewController: UICollectionViewDataSource {
-    
-    
-    // MARK: - Header of collection
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderView.reuseId, for: indexPath)
-        return sectionHeader
-    }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         testMassiv.count
@@ -145,9 +135,14 @@ extension ViewController: UICollectionViewDataSource {
 
 extension ViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
+
+        
         let vc = searchController.searchResultsController as? ResultVc
-        vc?.view.backgroundColor = .yellow
-        print(text)
+        
+
+        
+        guard let text = searchController.searchBar.text else { return }
+        
+       
     }
 }
