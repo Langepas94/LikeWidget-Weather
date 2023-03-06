@@ -20,35 +20,68 @@ class ResultVc: UIViewController {
         return table
     }()
     
+    private var localeNetwork = LocaleNetworkManager()
+    var massa: [WelcomeElement]?
     let testMassov = ["1", "2", "3","1", "2", "3","1", "2", "3","1", "2", "3"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUi()
         tableView.dataSource = self
+        tableView.delegate = self
         
     }
 }
 
 // MARK: extension Datasource
-extension ResultVc: UITableViewDataSource {
+extension ResultVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        testMassov.count
+        100
     }
     
  // MARK: - Setup Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableView", for: indexPath)
-        
         var config = cell.defaultContentConfiguration()
         
-        config.text = testMassov[indexPath.row]
-       
-        cell.contentConfiguration = config
+      
+            
+            self.localeNetwork.fetchData { [weak self ] result in
+                
+                switch result {
+                case .success(let data):
+                    self?.massa = data
+                    DispatchQueue.main.async {
+                        
+                        config.text = self?.massa![indexPath.row].name
+                        cell.contentConfiguration = config
+                        print()
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
+        
+        
+        
+        
+        
+//        config.text = testMassov[indexPath.row]
+        
+        
         cell.backgroundColor = .backColor?.withAlphaComponent(0.3)
         return cell
     }
-    
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = AddCityScreen()
+        
+        self.modalPresentationStyle = .popover
+        
+        self.present(vc, animated: true)
+    }
     
 }
 

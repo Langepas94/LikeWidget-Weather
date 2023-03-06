@@ -11,7 +11,7 @@ import SnapKit
 
 class AddCityScreen: UIViewController {
     
-    private let mainCityLabel: UILabel = {
+     let mainCityLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 30)

@@ -21,7 +21,9 @@
 		443E425929AE2CB60046091B /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425829AE2CB60046091B /* ApiKey.swift */; };
 		44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEA329B5DDBB00087692 /* ResultVc.swift */; };
 		44B5AEAA29B5E9DC00087692 /* AddCityScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEA929B5E9DC00087692 /* AddCityScreen.swift */; };
-		44DFAAF629B1DBE3004E408D /* city.list.json in Resources */ = {isa = PBXBuildFile; fileRef = 44DFAAF529B1DBE3004E408D /* city.list.json */; };
+		44B5AEAC29B5F93B00087692 /* LocaleNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEAB29B5F93B00087692 /* LocaleNetworkManager.swift */; };
+		44B5AEAE29B6003C00087692 /* LocaleListWeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEAD29B6003C00087692 /* LocaleListWeatherDataModel.swift */; };
+		44DFAAF629B1DBE3004E408D /* citylist.json in Resources */ = {isa = PBXBuildFile; fileRef = 44DFAAF529B1DBE3004E408D /* citylist.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +41,9 @@
 		443E425829AE2CB60046091B /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = "<group>"; };
 		44B5AEA329B5DDBB00087692 /* ResultVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVc.swift; sourceTree = "<group>"; };
 		44B5AEA929B5E9DC00087692 /* AddCityScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityScreen.swift; sourceTree = "<group>"; };
-		44DFAAF529B1DBE3004E408D /* city.list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = city.list.json; sourceTree = "<group>"; };
+		44B5AEAB29B5F93B00087692 /* LocaleNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleNetworkManager.swift; sourceTree = "<group>"; };
+		44B5AEAD29B6003C00087692 /* LocaleListWeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleListWeatherDataModel.swift; sourceTree = "<group>"; };
+		44DFAAF529B1DBE3004E408D /* citylist.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = citylist.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +131,7 @@
 				44DFAAF429B1DBC9004E408D /* Cities list */,
 				443E425C29AF4D8D0046091B /* Model */,
 				443E425429AE2C210046091B /* NetworkManager.swift */,
+				44B5AEAB29B5F93B00087692 /* LocaleNetworkManager.swift */,
 				443E425829AE2CB60046091B /* ApiKey.swift */,
 			);
 			path = Networking;
@@ -136,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				443E425629AE2C2A0046091B /* WeatherDataModel.swift */,
+				44B5AEAD29B6003C00087692 /* LocaleListWeatherDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -167,7 +173,7 @@
 		44DFAAF429B1DBC9004E408D /* Cities list */ = {
 			isa = PBXGroup;
 			children = (
-				44DFAAF529B1DBE3004E408D /* city.list.json */,
+				44DFAAF529B1DBE3004E408D /* citylist.json */,
 			);
 			path = "Cities list";
 			sourceTree = "<group>";
@@ -240,7 +246,7 @@
 			files = (
 				443E423C29ADF55A0046091B /* LaunchScreen.storyboard in Resources */,
 				443E423929ADF55A0046091B /* Assets.xcassets in Resources */,
-				44DFAAF629B1DBE3004E408D /* city.list.json in Resources */,
+				44DFAAF629B1DBE3004E408D /* citylist.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,8 +258,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				443E425529AE2C210046091B /* NetworkManager.swift in Sources */,
+				44B5AEAC29B5F93B00087692 /* LocaleNetworkManager.swift in Sources */,
 				44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */,
 				44B5AEAA29B5E9DC00087692 /* AddCityScreen.swift in Sources */,
+				44B5AEAE29B6003C00087692 /* LocaleListWeatherDataModel.swift in Sources */,
 				443E423429ADF55A0046091B /* ViewController.swift in Sources */,
 				443E425929AE2CB60046091B /* ApiKey.swift in Sources */,
 				443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */,

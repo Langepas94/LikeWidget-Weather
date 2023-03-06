@@ -21,6 +21,7 @@ class NetworkManager {
     enum RequestType {
         case city(city: String)
         case location(latitude: CLLocationDegrees, longitude: CLLocationDegrees)
+        case localeList
     }
     
     func fetchData(requestType: RequestType ,completion: @escaping(Result<WeatherDataModel, Error>) -> Void) {
@@ -32,9 +33,18 @@ class NetworkManager {
             urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric"
         case .location(let latitude, let longitude):
             urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&apikey=\(apiKey)&units=metric"
+        case .localeList:
+            guard let path = Bundle.main.path(forResource: "city.list", ofType: "json") else { return }
+           
+             urlString = "\(path)"
+            
+            print(path)
         }
         
+        
+       
        guard let url = URL(string: urlString) else {
+           print(urlString)
             completion(.failure(ResultError.invalidUrl))
                     return
                 }

@@ -140,8 +140,11 @@ extension ViewController: UISearchResultsUpdating {
         let vc = searchController.searchResultsController as? ResultVc
         
 
-        
+        vc?.tableView.isHidden = true
         guard let text = searchController.searchBar.text else { return }
+        
+
+        
         
        
     }
