@@ -18,6 +18,7 @@ class ViewController: UIViewController {
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.register(WeatherCell.self, forCellWithReuseIdentifier: WeatherCell.cellId)
+        collection.register(GeoWeatherCell.self, forCellWithReuseIdentifier: GeoWeatherCell.cellId)
         collection.showsVerticalScrollIndicator = false
         
         return collection
@@ -85,7 +86,45 @@ extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        var index = testMassiv[indexPath.row]
+        if indexPath.row == 0 {
+            let geoCell = mainCollection.dequeueReusableCell(withReuseIdentifier: GeoWeatherCell.cellId, for: indexPath) as! GeoWeatherCell
+            
+                self.network.fetchData(requestType: .city(city: "Pokachi")) { [weak self] result in
+                    switch result {
+                    case .success(let data):
+                        DispatchQueue.main.async {
+                            geoCell.configure(city: (data.city?.name)!, degrees: String( (data.list![0].main?.temp)!))
+                        }
+                    case .failure(_):
+                        print("mem")
+                    }
+                }
+                
+            // MARK: - neuromorph design
+            let lightShadow = CALayer()
+            lightShadow.frame = geoCell.bounds
+            lightShadow.backgroundColor = UIColor.white.cgColor
+            lightShadow.shadowColor = UIColor.white.withAlphaComponent(0.4).cgColor
+            lightShadow.shadowRadius = 5
+            lightShadow.cornerRadius = 20
+            lightShadow.shadowOffset = CGSize(width: -5, height: -5)
+            lightShadow.shadowOpacity = 1
+            
+            
+            let darkShadow = CALayer()
+            darkShadow.frame = geoCell.bounds
+            darkShadow.backgroundColor = UIColor.white.cgColor
+            darkShadow.shadowRadius = 5
+            darkShadow.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
+            darkShadow.cornerRadius = 20
+            darkShadow.shadowOffset = CGSize(width: 10, height: 10)
+            darkShadow.shadowOpacity = 1
+            
+            geoCell.layer.insertSublayer(darkShadow, at: 0)
+            geoCell.layer.insertSublayer(lightShadow, at: 0)
+            return geoCell
+        }
+//        var index = testMassiv[indexPath.row]
         
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
         
@@ -112,9 +151,9 @@ extension ViewController: UICollectionViewDataSource {
         cell.layer.insertSublayer(darkShadow, at: 0)
         cell.layer.insertSublayer(lightShadow, at: 0)
         
-        DispatchQueue.main.async {
+        
             
-            self.network.fetchData(requestType: .city(city: index)) { [weak self] result in
+        self.network.fetchData(requestType: .city(city: testMassiv[indexPath.row])) { [weak self] result in
                 switch result {
                 case .success(let data):
                     DispatchQueue.main.async {
@@ -125,27 +164,22 @@ extension ViewController: UICollectionViewDataSource {
                 }
             }
             
-        }
+
         
         return cell
     }
-    
-    
 }
 
 extension ViewController: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
 
         
         let vc = searchController.searchResultsController as? ResultVc
         
-
-        vc?.tableView.isHidden = true
+       
         guard let text = searchController.searchBar.text else { return }
-        
-
-        
-        
+           
        
     }
 }

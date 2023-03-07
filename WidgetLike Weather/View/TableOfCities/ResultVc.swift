@@ -22,7 +22,6 @@ class ResultVc: UIViewController {
     
     private var localeNetwork = LocaleNetworkManager()
     var massa: [WelcomeElement]?
-    let testMassov = ["1", "2", "3","1", "2", "3","1", "2", "3","1", "2", "3"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +35,7 @@ class ResultVc: UIViewController {
 // MARK: extension Datasource
 extension ResultVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        100
+        55
     }
     
  // MARK: - Setup Cell
@@ -63,12 +62,7 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
                 }
             }
             
-        
-        
-        
-        
-        
-//        config.text = testMassov[indexPath.row]
+
         
         
         cell.backgroundColor = .backColor?.withAlphaComponent(0.3)

@@ -19,6 +19,8 @@
 		443E425529AE2C210046091B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425429AE2C210046091B /* NetworkManager.swift */; };
 		443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425629AE2C2A0046091B /* WeatherDataModel.swift */; };
 		443E425929AE2CB60046091B /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E425829AE2CB60046091B /* ApiKey.swift */; };
+		4488845829B7226800571676 /* MockMassive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488845729B7226800571676 /* MockMassive.swift */; };
+		4488845A29B725F200571676 /* GeoWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488845929B725F200571676 /* GeoWeatherCell.swift */; };
 		44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEA329B5DDBB00087692 /* ResultVc.swift */; };
 		44B5AEAA29B5E9DC00087692 /* AddCityScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEA929B5E9DC00087692 /* AddCityScreen.swift */; };
 		44B5AEAC29B5F93B00087692 /* LocaleNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEAB29B5F93B00087692 /* LocaleNetworkManager.swift */; };
@@ -39,6 +41,8 @@
 		443E425429AE2C210046091B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		443E425629AE2C2A0046091B /* WeatherDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataModel.swift; sourceTree = "<group>"; };
 		443E425829AE2CB60046091B /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = "<group>"; };
+		4488845729B7226800571676 /* MockMassive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMassive.swift; sourceTree = "<group>"; };
+		4488845929B725F200571676 /* GeoWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoWeatherCell.swift; sourceTree = "<group>"; };
 		44B5AEA329B5DDBB00087692 /* ResultVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVc.swift; sourceTree = "<group>"; };
 		44B5AEA929B5E9DC00087692 /* AddCityScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCityScreen.swift; sourceTree = "<group>"; };
 		44B5AEAB29B5F93B00087692 /* LocaleNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleNetworkManager.swift; sourceTree = "<group>"; };
@@ -95,6 +99,7 @@
 				443E422F29ADF55A0046091B /* AppDelegate.swift */,
 				443E423129ADF55A0046091B /* SceneDelegate.swift */,
 				443E423A29ADF55A0046091B /* LaunchScreen.storyboard */,
+				4488845729B7226800571676 /* MockMassive.swift */,
 			);
 			path = "App files";
 			sourceTree = "<group>";
@@ -121,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				443E425129AE0EBF0046091B /* WeatherCell.swift */,
+				4488845929B725F200571676 /* GeoWeatherCell.swift */,
 			);
 			path = CustomCell;
 			sourceTree = "<group>";
@@ -259,6 +265,7 @@
 			files = (
 				443E425529AE2C210046091B /* NetworkManager.swift in Sources */,
 				44B5AEAC29B5F93B00087692 /* LocaleNetworkManager.swift in Sources */,
+				4488845829B7226800571676 /* MockMassive.swift in Sources */,
 				44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */,
 				44B5AEAA29B5E9DC00087692 /* AddCityScreen.swift in Sources */,
 				44B5AEAE29B6003C00087692 /* LocaleListWeatherDataModel.swift in Sources */,
@@ -268,6 +275,7 @@
 				443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */,
 				443E425229AE0EBF0046091B /* WeatherCell.swift in Sources */,
 				443E423029ADF55A0046091B /* AppDelegate.swift in Sources */,
+				4488845A29B725F200571676 /* GeoWeatherCell.swift in Sources */,
 				443E423229ADF55A0046091B /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
