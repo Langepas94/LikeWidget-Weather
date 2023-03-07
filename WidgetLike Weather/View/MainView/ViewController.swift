@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import CoreLocation
 
 class ViewController: UIViewController {
     
@@ -28,15 +29,37 @@ class ViewController: UIViewController {
     
     private var network = NetworkManager()
     
+    private var locationManaging: CLLocationManager = {
+        let location = CLLocationManager()
+        location.desiredAccuracy = .greatestFiniteMagnitude
+        
+        return location
+    }()
+    
+    var latit = CLLocationDegrees()
+    var longit = CLLocationDegrees()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManaging.delegate = self
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                self.locationManaging.requestLocation()
+                self.locationManaging.startUpdatingLocation()
+            }
+        }
+        
+        
         setupUI()
+        
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Widget Weather"
         
         searchController.searchBar.placeholder = "add your city"
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
+        
     }
     
     // MARK: - createCompositionalLayout()
@@ -89,17 +112,18 @@ extension ViewController: UICollectionViewDataSource {
         if indexPath.row == 0 {
             let geoCell = mainCollection.dequeueReusableCell(withReuseIdentifier: GeoWeatherCell.cellId, for: indexPath) as! GeoWeatherCell
             
-                self.network.fetchData(requestType: .city(city: "Pokachi")) { [weak self] result in
-                    switch result {
-                    case .success(let data):
-                        DispatchQueue.main.async {
-                            geoCell.configure(city: (data.city?.name)!, degrees: String( (data.list![0].main?.temp)!))
+                        self.network.fetchData(requestType: .location(latitude: latit, longitude: longit)) { [weak self] result in
+                            switch result {
+                            case .success(let data):
+                                DispatchQueue.main.async {
+                                    geoCell.configure(city: (data.city?.name)!, degrees: String( (data.list![0].main?.temp)!))
+                                    
+                                }
+                            case .failure(_):
+                                print("mem")
+                            }
                         }
-                    case .failure(_):
-                        print("mem")
-                    }
-                }
-                
+            
             // MARK: - neuromorph design
             let lightShadow = CALayer()
             lightShadow.frame = geoCell.bounds
@@ -124,7 +148,7 @@ extension ViewController: UICollectionViewDataSource {
             geoCell.layer.insertSublayer(lightShadow, at: 0)
             return geoCell
         }
-//        var index = testMassiv[indexPath.row]
+        //        var index = testMassiv[indexPath.row]
         
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
         
@@ -152,34 +176,67 @@ extension ViewController: UICollectionViewDataSource {
         cell.layer.insertSublayer(lightShadow, at: 0)
         
         
-            
+        
         self.network.fetchData(requestType: .city(city: testMassiv[indexPath.row])) { [weak self] result in
-                switch result {
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        cell.configure(city: (data.city?.name)!, degrees: String( (data.list![0].main?.temp)!))
-                    }
-                case .failure(_):
-                    print("mem")
+            switch result {
+            case .success(let data):
+                DispatchQueue.main.async {
+                    cell.configure(city: (data.city?.name)!, degrees: String( (data.list![0].main?.temp)!))
+                    
                 }
+            case .failure(_):
+                print("mem")
             }
-            
-
+        }
+        
+        
         
         return cell
     }
 }
-
+// MARK: Search Updating
 extension ViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
-
+        
         
         let vc = searchController.searchResultsController as? ResultVc
         
-       
+        
         guard let text = searchController.searchBar.text else { return }
-           
-       
+        
+        
+    }
+}
+// MARK: - location Setup
+
+extension ViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        let latitude = location.coordinate.latitude
+        let longitude = location.coordinate.longitude
+        //        network.fetchData(requestType: .location(latitude: latitude, longitude: longitude)) { [unowned self] result in
+        //            switch result {
+        //            case .success(let data):
+        //                DispatchQueue.main.async {
+        //
+        ////                    print(data.city?.name)
+        //
+        //                }
+        //
+        //            case .failure(let error):
+        //                print(error)
+        //            }
+        //        }
+        self.latit = latitude
+        self.longit = longitude
+        locationManaging.stopUpdatingLocation()
+        mainCollection.reloadData()
+ 
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
     }
 }
