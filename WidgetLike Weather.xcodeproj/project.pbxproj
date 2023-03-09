@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		443E423029ADF55A0046091B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E422F29ADF55A0046091B /* AppDelegate.swift */; };
 		443E423229ADF55A0046091B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E423129ADF55A0046091B /* SceneDelegate.swift */; };
-		443E423429ADF55A0046091B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E423329ADF55A0046091B /* ViewController.swift */; };
+		443E423429ADF55A0046091B /* MainScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E423329ADF55A0046091B /* MainScreenViewController.swift */; };
 		443E423929ADF55A0046091B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 443E423829ADF55A0046091B /* Assets.xcassets */; };
 		443E423C29ADF55A0046091B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 443E423A29ADF55A0046091B /* LaunchScreen.storyboard */; };
 		443E424729ADF8600046091B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 443E424629ADF8600046091B /* SnapKit */; };
@@ -32,7 +32,7 @@
 		443E422C29ADF55A0046091B /* WidgetLike Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WidgetLike Weather.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		443E422F29ADF55A0046091B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		443E423129ADF55A0046091B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		443E423329ADF55A0046091B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		443E423329ADF55A0046091B /* MainScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenViewController.swift; sourceTree = "<group>"; };
 		443E423829ADF55A0046091B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		443E423B29ADF55A0046091B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		443E423D29ADF55A0046091B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 		44B5AEA829B5E9CB00087692 /* MainView */ = {
 			isa = PBXGroup;
 			children = (
-				443E423329ADF55A0046091B /* ViewController.swift */,
+				443E423329ADF55A0046091B /* MainScreenViewController.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -269,7 +269,7 @@
 				44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */,
 				44B5AEAA29B5E9DC00087692 /* AddCityScreen.swift in Sources */,
 				44B5AEAE29B6003C00087692 /* LocaleListWeatherDataModel.swift in Sources */,
-				443E423429ADF55A0046091B /* ViewController.swift in Sources */,
+				443E423429ADF55A0046091B /* MainScreenViewController.swift in Sources */,
 				443E425929AE2CB60046091B /* ApiKey.swift in Sources */,
 				443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */,
 				443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */,

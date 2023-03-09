@@ -8,3 +8,5 @@
 import Foundation
 
 var mockMasiv = ["London", "Langepas", "Moscow", "Paris", "Domodedovo", "Surgut", "Kaluga", "Sochi", "Lermontovo", "Krasnodar", "Ekaterinburg", "Astrakhan"]
+
+var filteredMassiv = [String]()

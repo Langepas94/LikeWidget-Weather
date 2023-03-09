@@ -21,7 +21,6 @@ class ResultVc: UIViewController {
     }()
     
     private var localeNetwork = LocaleNetworkManager()
-    var massa: [WelcomeElement]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,45 +34,29 @@ class ResultVc: UIViewController {
 // MARK: extension Datasource
 extension ResultVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        55
+        filteredMassiv.count
     }
     
  // MARK: - Setup Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableView", for: indexPath)
         var config = cell.defaultContentConfiguration()
-        
-      
-            
-            self.localeNetwork.fetchData { [weak self ] result in
-                
-                switch result {
-                case .success(let data):
-                    
-                    DispatchQueue.main.async {
-                        
-                        config.text = data[indexPath.row].name
-                        cell.contentConfiguration = config
-                        print()
-                    }
-                    
-                case .failure(let error):
-                    print(error)
-                }
-            }
+        config.text = mockMasiv[indexPath.row]
+
             
 
-        
+        cell.contentConfiguration = config
+        cell.textLabel?.text = filteredMassiv[indexPath.row]
         
         cell.backgroundColor = .backColor?.withAlphaComponent(0.3)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let vc = AddCityScreen()
         
-        self.modalPresentationStyle = .popover
-        
+        vc.titleCity = filteredMassiv[indexPath.row]
         self.present(vc, animated: true)
     }
     
