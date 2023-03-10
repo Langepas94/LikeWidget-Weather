@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import Combine
 
 class AddCityScreen: UIViewController {
     
@@ -19,7 +20,7 @@ class AddCityScreen: UIViewController {
     }()
     
     let actionButton: UIButton = {
-        let button = UIButton()
+		let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Push me", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -27,6 +28,7 @@ class AddCityScreen: UIViewController {
         return button
     }()
     
+	var cancellables: Set<AnyCancellable> = []
     var callCity: ((String?) -> ())?
     var titleCity: String?
     
@@ -39,7 +41,15 @@ class AddCityScreen: UIViewController {
     }
     
     @objc func buttonAction() {
-        callCity?(titleCity)
+		let name = titleCity!.split(separator: "|")[1].trimmingCharacters(in: .whitespaces)
+		CitiesService.shared.saveFavorite(name)
+			.sink { _ in
+				
+			} receiveValue: { _ in
+				CitiesService.shared.favoritesAppender.send(name)
+			}
+			.store(in: &cancellables)
+
         self.dismiss(animated: true)
 
     }

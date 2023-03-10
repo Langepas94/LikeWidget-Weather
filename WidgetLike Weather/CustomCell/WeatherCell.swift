@@ -75,6 +75,11 @@ class WeatherCell: UICollectionViewCell {
         
         
     }
+	
+	override func prepareForReuse() {
+		cityNameLabel.text = ""
+		degreesLabel.text = ""
+	}
     
     func configure(city: String, degrees: String) {
         self.cityNameLabel.text = city

@@ -20,8 +20,10 @@ class ResultVc: UIViewController {
         return table
     }()
     
+	public var filteredNames: [String] = []
     private var localeNetwork = LocaleNetworkManager()
-    
+	var callCity: ((String?) -> ())?
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUi()
@@ -34,19 +36,19 @@ class ResultVc: UIViewController {
 // MARK: extension Datasource
 extension ResultVc: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        filteredMassiv.count
+		filteredNames.count
     }
     
  // MARK: - Setup Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableView", for: indexPath)
         var config = cell.defaultContentConfiguration()
-        config.text = mockMasiv[indexPath.row]
+        config.text = filteredNames[indexPath.row]
 
             
 
         cell.contentConfiguration = config
-        cell.textLabel?.text = filteredMassiv[indexPath.row]
+        cell.textLabel?.text = filteredNames[indexPath.row]
         
         cell.backgroundColor = .backColor?.withAlphaComponent(0.3)
         return cell
@@ -56,7 +58,8 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
         
         let vc = AddCityScreen()
         
-        vc.titleCity = filteredMassiv[indexPath.row]
+		vc.callCity = self.callCity
+        vc.titleCity = filteredNames[indexPath.row]
         self.present(vc, animated: true)
     }
     
