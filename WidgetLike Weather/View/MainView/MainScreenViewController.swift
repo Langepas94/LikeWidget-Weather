@@ -8,11 +8,16 @@
 import UIKit
 import SnapKit
 import CoreLocation
+import SQLite
+import Combine
 
 class MainScreenViewController: UIViewController {
     
     // MARK: - elements of view
-    private let searchController = UISearchController(searchResultsController: ResultVc())
+	private lazy var searchController: UISearchController = {
+		let vc = ResultVc()
+		return UISearchController(searchResultsController: vc)
+	}()
     
     private lazy var mainCollection: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
@@ -25,9 +30,14 @@ class MainScreenViewController: UIViewController {
         return collection
     }()
     
-    var testMassiv = ["Vrdy", "Vrbovec", "Lagoa", "Ahtanum", "Anacortes", "Belfast"]
+	var isCitiesLoaded = false
+	var cancellables: Set<AnyCancellable> = []
+	var testMassiv: [String] {
+		CitiesService.shared.favorites
+	}
     
     private var network = NetworkManager()
+	private var searchPublisher = PassthroughSubject<String, Never>()
     
     private var locationManaging: CLLocationManager = {
         let location = CLLocationManager()
@@ -55,26 +65,45 @@ class MainScreenViewController: UIViewController {
 
         setupUI()
 
-    }
-    
-    // второй раз не отрабатывает
-    // поиграться сделать делегаты
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        addCityVC = AddCityScreen()
-        addCityVC.callCity = {[weak self] data in
-            print(data)
-        }
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        addCityVC = AddCityScreen()
-        addCityVC.callCity = {[weak self] data in
-            print(data)
-        }
-        
+		CitiesService.shared.loadCities()
+			.receive(on: DispatchQueue.main)
+			.sink { completion in
+				switch completion {
+				case .finished: break
+				case .failure(let error):
+					print(error.localizedDescription)
+				}
+			} receiveValue: {[weak self] names in
+				guard let self = self else { return }
+				self.isCitiesLoaded = true
+			}
+			.store(in: &cancellables)
+		
+		searchPublisher
+			.debounce(for: 0.5, scheduler: DispatchQueue.main)
+			.removeDuplicates()
+			.compactMap({ $0 })
+			.sink(receiveValue: {[weak self] (searchString: String) in
+				guard let self = self else { return }
+				CitiesService.shared.searchCities(query: searchString)
+					.receive(on: DispatchQueue.main)
+					.sink { filteredNames in
+						let vc = self.searchController.searchResultsController as? ResultVc
+						vc?.filteredNames = filteredNames
+						vc?.tableView.reloadData()
+					}
+					.store(in: &self.cancellables)
+			})
+			.store(in: &cancellables)
+		
+		CitiesService.shared.favoritesAppender
+			.receive(on: DispatchQueue.main)
+			.sink {[weak self] _ in
+				guard let self = self else { return }
+				self.mainCollection.reloadData()
+			}
+			.store(in: &cancellables)
+
     }
     
     // MARK: - createCompositionalLayout()
@@ -96,7 +125,6 @@ class MainScreenViewController: UIViewController {
                                                heightDimension: .fractionalWidth(0.5))
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         
         return section
@@ -108,9 +136,9 @@ class MainScreenViewController: UIViewController {
 extension MainScreenViewController {
     func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Widget Weather"
+        title = "Favorites"
         
-        searchController.searchBar.placeholder = "add your city"
+        searchController.searchBar.placeholder = "Search for your new favorite city"
         searchController.searchResultsUpdater = self
         navigationItem.searchController = searchController
         mainCollection.backgroundColor = .systemBackground
@@ -137,6 +165,9 @@ extension MainScreenViewController: UICollectionViewDataSource {
                 self.lat = location.coordinate.latitude
                 self.lon = location.coordinate.longitude
             }
+			
+			geoCell.configure(city: "GeoCell", degrees: "Load")
+			
             self.network.fetchData(requestType: .location(latitude: lat ?? 00.00, longitude: lon ?? 00.00)) { [weak self] result in
                 
                 switch result {
@@ -148,6 +179,9 @@ extension MainScreenViewController: UICollectionViewDataSource {
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
+					DispatchQueue.main.async {
+						geoCell.configure(city: "GeoCell", degrees: "Fail")
+					}
                 }
             }
             
@@ -159,7 +193,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
 
         
         
-        
+		cell.configure(city: testMassiv[indexPath.row - 1], degrees: "Load")
         self.network.fetchData(requestType: .city(city: testMassiv[indexPath.row - 1])) { [weak self] result in
             switch result {
             case .success(let data):
@@ -169,6 +203,10 @@ extension MainScreenViewController: UICollectionViewDataSource {
                 }
             case .failure(let error):
                 print(error.localizedDescription)
+				DispatchQueue.main.async {
+					cell.configure(city: self!.testMassiv[indexPath.row - 1], degrees: "Fail")
+					
+				}
             }
         }
         return cell
@@ -179,13 +217,8 @@ extension MainScreenViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         
-        let vc = searchController.searchResultsController as? ResultVc
         guard let text = searchController.searchBar.text else { return }
-        
-        filteredMassiv = mockMasiv.filter {
-            $0.contains(text)
-        }
-        vc?.tableView.reloadData()
+		searchPublisher.send(text)
     }
 }
 // MARK: - location Setup
@@ -203,4 +236,29 @@ extension MainScreenViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
     }
+}
+
+struct DataCacheService {
+	
+	var connection: Connection?
+	static private(set) var shared = DataCacheService()
+	
+	private init() {
+		do {
+			guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+			userDirectory.appendPathComponent("DataCache")
+			userDirectory.appendPathExtension("sqlite3")
+			connection = try SQLite.Connection(userDirectory.path)
+		} catch {
+			print(error.localizedDescription)
+		}
+	}
+	
+	public func clear() {
+		guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+		userDirectory.appendPathComponent("DataCache")
+		userDirectory.appendPathExtension("sqlite3")
+		try? FileManager.default.removeItem(at: userDirectory)
+		DataCacheService.shared = DataCacheService()
+	}
 }

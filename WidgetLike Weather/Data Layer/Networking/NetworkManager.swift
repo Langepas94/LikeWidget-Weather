@@ -30,9 +30,9 @@ class NetworkManager {
         
         switch requestType {
         case .city(let city):
-            urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric"
+			urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         case .location(let latitude, let longitude):
-            urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&apikey=\(apiKey)&units=metric"
+			urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&apikey=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         case .localeList:
             guard let path = Bundle.main.path(forResource: "city.list", ofType: "json") else { return }
            
@@ -58,11 +58,21 @@ class NetworkManager {
                            return
                        }
             do {
+				var jsonStr: String?
+				if var obj = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed),
+				   let data = try? JSONSerialization.data(withJSONObject: obj, options: [.fragmentsAllowed, .withoutEscapingSlashes , .prettyPrinted]),
+				   let string = String(data: data, encoding: .utf8) {
+					jsonStr = string
+				} else {
+					jsonStr = String(data: data, encoding: .utf8)
+				}
+				print(jsonStr ?? "No data")
                 let result = try JSONDecoder().decode(WeatherDataModel.self, from: data)
                             completion(.success(result))
                 
                         } catch {
                             completion(.failure(error))
+							print(error)
                         }
         }.resume()
     }
