@@ -21,7 +21,6 @@ class ResultVc: UIViewController {
     }()
     
 	public var filteredNames: [String] = []
-    private var localeNetwork = LocaleNetworkManager()
 	var callCity: ((String?) -> ())?
 	
     override func viewDidLoad() {

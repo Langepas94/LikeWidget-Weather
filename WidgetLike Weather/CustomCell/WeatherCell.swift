@@ -80,12 +80,12 @@ class WeatherCell: UICollectionViewCell {
 		cityNameLabel.text = ""
 		degreesLabel.text = ""
 	}
-    
-    func configure(city: String, degrees: String) {
+    // когда функция огромная по параметрам то проще структуру сделать и структуру передавать в функцию
+    func configure(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String) {
         self.cityNameLabel.text = city
         self.degreesLabel.text = degrees + "°"
-        self.descriptionWeatherLabel.text = "Облачно"
-        self.descriptionDegreesLabel.text = "-1° +6°"
+        self.descriptionWeatherLabel.text = descriptionWeather
+        self.descriptionDegreesLabel.text = descrptionDegrees
     }
     
     required init?(coder: NSCoder) {
@@ -106,7 +106,7 @@ extension WeatherCell {
         mainView.addSubview(descriptionWeatherLabel)
         mainView.addSubview(descriptionDegreesLabel)
         
-
+        // добаволю жест и во вьюмодель добавить кложер (nullable)
 
         
         // MARK: - Constraints

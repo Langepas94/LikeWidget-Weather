@@ -22,7 +22,7 @@ class AddCityScreen: UIViewController {
     let actionButton: UIButton = {
 		let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Push me", for: .normal)
+        button.setTitle("Add this city", for: .normal)
         button.setTitleColor(.black, for: .normal)
        
         return button
@@ -60,7 +60,7 @@ extension AddCityScreen {
         view.addSubview(mainCityLabel)
         view.addSubview(actionButton)
         
-        view.backgroundColor = .yellow
+        view.backgroundColor = .white
         mainCityLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
