@@ -75,18 +75,25 @@ class WeatherCell: UICollectionViewCell {
         
         
     }
-	
-	override func prepareForReuse() {
-		cityNameLabel.text = ""
-		degreesLabel.text = ""
-	}
+    
+    override func prepareForReuse() {
+        cityNameLabel.text = ""
+        degreesLabel.text = ""
+    }
     // когда функция огромная по параметрам то проще структуру сделать и структуру передавать в функцию
-    func configure(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
-        self.cityNameLabel.text = city
-        self.degreesLabel.text = degrees + "°"
-        self.descriptionWeatherLabel.text = descriptionWeather
-        self.descriptionDegreesLabel.text = descrptionDegrees
-        self.weatherImage.image = UIImage(named: icon ?? "")
+        func configureDefault(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
+            self.cityNameLabel.text = city
+            self.degreesLabel.text = degrees + "°"
+            self.descriptionWeatherLabel.text = descriptionWeather
+            self.descriptionDegreesLabel.text = descrptionDegrees
+            self.weatherImage.image = UIImage(named: icon ?? "")
+        }
+    func configure(data: WeatherCellModel) {
+        self.cityNameLabel.text = data.city
+        self.degreesLabel.text = data.degrees + "°"
+        self.descriptionWeatherLabel.text = data.descriptionWeather
+        self.descriptionDegreesLabel.text = data.descrptionDegrees
+        self.weatherImage.image = UIImage(named: data.icon ?? "")
     }
     
     required init?(coder: NSCoder) {
@@ -99,7 +106,7 @@ extension WeatherCell {
     func setupView() {
         mainView.backgroundColor = .white
         mainView.layer.cornerRadius = 20
-   
+        
         contentView.addSubview(mainView)
         mainView.addSubview(cityNameLabel)
         mainView.addSubview(degreesLabel)
@@ -108,7 +115,7 @@ extension WeatherCell {
         mainView.addSubview(descriptionDegreesLabel)
         
         // добаволю жест и во вьюмодель добавить кложер (nullable)
-
+        
         
         // MARK: - Constraints
         

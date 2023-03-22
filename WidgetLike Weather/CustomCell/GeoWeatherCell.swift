@@ -81,12 +81,20 @@ class GeoWeatherCell: UICollectionViewCell {
         
     }
     
-    func configure(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
+    func configureDefault(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
         self.cityNameLabel.text = city
         self.degreesLabel.text = degrees + "°"
         self.descriptionWeatherLabel.text = descriptionWeather
         self.descriptionDegreesLabel.text = descrptionDegrees
         self.weatherImage.image = UIImage(named: icon ?? "")
+    }
+    
+    func configure(data: WeatherCellModel) {
+        self.cityNameLabel.text = data.city
+        self.degreesLabel.text = data.degrees + "°"
+        self.descriptionWeatherLabel.text = data.descriptionWeather
+        self.descriptionDegreesLabel.text = data.descrptionDegrees
+        self.weatherImage.image = UIImage(named: data.icon ?? "")
     }
     
     required init?(coder: NSCoder) {

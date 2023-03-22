@@ -19,8 +19,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
+        let tabBar = UITabBarController()
+        tabBar.tabBar.tintColor = .label
         let navigationController = UINavigationController(rootViewController: MainScreenViewController())
-        window?.rootViewController = navigationController
+        navigationController.tabBarItem.image = UIImage(systemName: "cloud.circle")
+        navigationController.title = "Weather"
+        
+        let mapController = MapViewController()
+        mapController.tabBarItem.image = UIImage(systemName: "map.circle")
+        mapController.title = "Map weather"
+        
+        tabBar.setViewControllers([navigationController, mapController], animated: true)
+        window?.rootViewController = tabBar
         window?.makeKeyAndVisible()
     }
 

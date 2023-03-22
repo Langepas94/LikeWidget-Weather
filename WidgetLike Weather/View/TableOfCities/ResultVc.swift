@@ -45,7 +45,7 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
         var config = cell.defaultContentConfiguration()
         config.text = filteredNames[indexPath.row]
 
-            
+        cell.selectionStyle = .none
 
         cell.contentConfiguration = config
         cell.textLabel?.text = filteredNames[indexPath.row]
