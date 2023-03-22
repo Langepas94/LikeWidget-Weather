@@ -47,7 +47,7 @@ class WeatherCell: UICollectionViewCell {
     
     private let weatherImage: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "cloud")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+        image.image = UIImage(named: "01n")
         image.contentMode = .center
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
@@ -81,11 +81,12 @@ class WeatherCell: UICollectionViewCell {
 		degreesLabel.text = ""
 	}
     // когда функция огромная по параметрам то проще структуру сделать и структуру передавать в функцию
-    func configure(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String) {
+    func configure(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
         self.cityNameLabel.text = city
         self.degreesLabel.text = degrees + "°"
         self.descriptionWeatherLabel.text = descriptionWeather
         self.descriptionDegreesLabel.text = descrptionDegrees
+        self.weatherImage.image = UIImage(named: icon ?? "")
     }
     
     required init?(coder: NSCoder) {

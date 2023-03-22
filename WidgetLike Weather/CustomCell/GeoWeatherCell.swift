@@ -45,7 +45,7 @@ class GeoWeatherCell: UICollectionViewCell {
     
     private let weatherImage: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "cloud")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+//        image.image = UIImage(systemName: "cloud")?.withTintColor(.black, renderingMode: .alwaysOriginal)
         image.contentMode = .center
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
@@ -81,11 +81,12 @@ class GeoWeatherCell: UICollectionViewCell {
         
     }
     
-    func configure(city: String, degrees: String) {
+    func configure(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
         self.cityNameLabel.text = city
         self.degreesLabel.text = degrees + "°"
-        self.descriptionWeatherLabel.text = "Облачно"
-        self.descriptionDegreesLabel.text = "-1° +6°"
+        self.descriptionWeatherLabel.text = descriptionWeather
+        self.descriptionDegreesLabel.text = descrptionDegrees
+        self.weatherImage.image = UIImage(named: icon ?? "")
     }
     
     required init?(coder: NSCoder) {

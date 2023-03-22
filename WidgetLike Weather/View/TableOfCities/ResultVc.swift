@@ -22,9 +22,10 @@ class ResultVc: UIViewController {
     
 	public var filteredNames: [String] = []
 	var callCity: ((String?) -> ())?
-	
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+      
         setupUi()
         tableView.dataSource = self
         tableView.delegate = self
@@ -59,15 +60,26 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
         
 		vc.callCity = self.callCity
         vc.titleCity = filteredNames[indexPath.row]
-        self.present(vc, animated: true)
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
+        vc.preferredContentSize = CGSize(width: 330, height: 120)
+        vc.popoverPresentationController?.sourceRect = self.tableView.rectForRow(at: indexPath)
+        vc.popoverPresentationController?.sourceView = self.tableView
+        
+        present(vc, animated: true)
     }
     
+}
+
+extension ResultVc: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        .none
+    }
 }
 
 // MARK: SetupUi
 extension ResultVc {
     func setupUi() {
-        
         view.backgroundColor = .backColor?.withAlphaComponent(0.96)
         view.addSubview(tableView)
         

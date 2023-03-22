@@ -180,19 +180,19 @@ extension MainScreenViewController: UICollectionViewDataSource {
                 self.lon = location.coordinate.longitude
             }
             
-            geoCell.configure(city: "GeoCell", degrees: "Load")
+            geoCell.configure(city: "Loading", degrees: "loading", descriptionWeather: "", descrptionDegrees: "", icon: "")
             
             self.network.fetchData(requestType: .location(latitude: lat ?? 00.00, longitude: lon ?? 00.00)) { [weak self] result in
                 
                 switch result {
                 case .success(let data):
                     DispatchQueue.main.async {
-                        geoCell.configure(city: data.city?.name ?? "no city", degrees: String( (data.list![0].main?.temp) ?? 00))
+                        geoCell.configure(city: data.city?.name ?? "no city", degrees: String( data.list![0].main?.temp ?? 00), descriptionWeather: data.list?[0].weather?[0].description ?? "", descrptionDegrees: String((data.list?[0].main?.tempMax ?? 0/0)), icon: data.list?[0].weather?[0].icon)
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
                     DispatchQueue.main.async {
-                        geoCell.configure(city: "GeoCell", degrees: "Fail")
+                        geoCell.configure(city: "Fail load", degrees: "", descriptionWeather: "", descrptionDegrees: "", icon: "")
                     }
                 }
             }
@@ -213,7 +213,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
         //        var dataItem = favoriteCities[indexPath.row - 1]
         
         // MARK: - cell configure
-        cell.configure(city: dataItem.name, degrees: "Load", descriptionWeather: "Load", descrptionDegrees: "loading")
+        cell.configure(city: dataItem.name, degrees: "Load", descriptionWeather: "Load", descrptionDegrees: "loading", icon: "")
         self.network.fetchData(requestType: .city(city: dataItem.name)) { [weak self] result in
             switch result {
             case .success(let data):
@@ -221,13 +221,13 @@ extension MainScreenViewController: UICollectionViewDataSource {
                     
                     let degrees = data.list![0].main?.temp
                     dataItem.degrees = degrees
-                    cell.configure(city: data.city?.name ?? "no city", degrees: String( degrees ?? 00), descriptionWeather: data.list?[0].weather?[0].description ?? "", descrptionDegrees: String((data.list?[0].main?.tempMax ?? 0/0)))
+                    cell.configure(city: data.city?.name ?? "no city", degrees: String( degrees ?? 00), descriptionWeather: data.list?[0].weather?[0].description ?? "", descrptionDegrees: String((data.list?[0].main?.tempMax ?? 0/0)), icon: data.list?[0].weather?[0].icon)
                     
                 }
             case .failure(let error):
                 print(error.localizedDescription)
                 DispatchQueue.main.async {
-                    cell.configure(city: dataItem.name, degrees: "Fail", descriptionWeather: "fail", descrptionDegrees: "")
+                    cell.configure(city: dataItem.name, degrees: "Fail", descriptionWeather: "fail", descrptionDegrees: "", icon: "")
                     
                 }
             }
