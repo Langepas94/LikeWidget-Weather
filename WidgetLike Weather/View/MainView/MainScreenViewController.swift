@@ -52,10 +52,30 @@ class MainScreenViewController: UIViewController {
     private var addCityVC: AddCityScreen!
     
     override func viewDidLoad() {
+        
+        switch locationManaging.authorizationStatus {
+        case .notDetermined:
+                    locationManaging.requestWhenInUseAuthorization()
+        case .restricted:
+            locationManaging.requestWhenInUseAuthorization()
+        case .denied:
+            locationManaging.requestWhenInUseAuthorization()
+        case .authorizedAlways:
+            break
+        case .authorizedWhenInUse:
+            break
+        case .authorized:
+            break
+        }
+        
+        
+        
         super.viewDidLoad()
         setupNavigationItem()
         locationManaging.delegate = self
-        locationManaging.requestWhenInUseAuthorization()
+        
+
+//        locationManaging.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
             if CLLocationManager.locationServicesEnabled() {
                 self.locationManaging.requestLocation()
@@ -136,12 +156,19 @@ class MainScreenViewController: UIViewController {
     }
     
     
+    
+    
 }
 // MARK: - setupUI func
 extension MainScreenViewController {
     func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        
+        
         title = "Favorites"
+        
+        
         
         searchController.searchBar.placeholder = "Search for your new favorite city"
         searchController.searchResultsUpdater = self
@@ -254,6 +281,7 @@ extension MainScreenViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         
         guard let text = searchController.searchBar.text else { return }
+        
         searchPublisher.send(text)
     }
 }
@@ -332,6 +360,7 @@ extension MainScreenViewController {
             CitiesService.shared.deleteFavorite(indexPath)
             self.favoriteCities.remove(at: indexPath!.row - 1)
             self.mainCollection.reloadData()
+            NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)

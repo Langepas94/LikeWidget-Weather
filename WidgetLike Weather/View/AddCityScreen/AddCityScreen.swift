@@ -90,6 +90,8 @@ class AddCityScreen: UIViewController {
 				CitiesService.shared.favoritesAppender.send(name)
 			}
 			.store(in: &cancellables)
+        
+        NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
 
         self.dismiss(animated: true)
     }
@@ -148,7 +150,7 @@ extension AddCityScreen {
         
         
         descriptionWeatherLabel.snp.makeConstraints { make in
-            make.top.equalTo(weatherImage.snp.bottom).offset(6)
+            make.bottom.equalToSuperview().offset(-16)
             make.leading.equalTo(weatherImage.snp.leading)
         }
         

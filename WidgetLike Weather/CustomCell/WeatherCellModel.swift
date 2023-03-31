@@ -14,6 +14,7 @@ struct WeatherCellModel {
     let descriptionWeather: String
     let descrptionDegrees: String
     let icon: String?
+    let timeZone: Int?
     
     init?(currentData: WeatherDataModel) {
         self.city = currentData.city?.name ?? ""
@@ -21,5 +22,6 @@ struct WeatherCellModel {
         self.descriptionWeather = currentData.list?[0].weather?[0].description ?? ""
         self.descrptionDegrees = String((currentData.list?[0].main?.tempMax ?? 0/0))
         self.icon = currentData.list?[0].weather?[0].icon
+        self.timeZone = currentData.city?.timezone
     }
 }
