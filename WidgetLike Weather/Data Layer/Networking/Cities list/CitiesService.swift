@@ -85,6 +85,8 @@ class CitiesService {
         }
     }
     
+ 
+    
     public func loadFavorites() -> Future<[String], Error> {
         Future { promise in
             DispatchQueue.global().async {

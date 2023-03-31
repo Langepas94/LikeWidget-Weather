@@ -71,6 +71,12 @@ class MainScreenViewController: UIViewController {
         
         
         super.viewDidLoad()
+        
+        
+            let path = NSSearchPathForDirectoriesInDomains(
+                .documentDirectory, .userDomainMask, true
+            ).first!
+        print(path)
         setupNavigationItem()
         locationManaging.delegate = self
         
@@ -87,34 +93,38 @@ class MainScreenViewController: UIViewController {
         self.mainCollection.addGestureRecognizer(longPress)
         setupUI()
         
-        CitiesService.shared.loadCities()
-            .receive(on: DispatchQueue.main)
-            .sink { completion in
-                switch completion {
-                case .finished: break
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            } receiveValue: {[weak self] names in
-                guard let self = self else { return }
-                self.isCitiesLoaded = true
-            }
-            .store(in: &cancellables)
+//        CitiesService.shared.loadCities()
+//            .receive(on: DispatchQueue.main)
+//            .sink { completion in
+//                switch completion {
+//                case .finished: break
+//                case .failure(let error):
+//                    print(error.localizedDescription)
+//                }
+//            } receiveValue: {[weak self] names in
+//                guard let self = self else { return }
+//                self.isCitiesLoaded = true
+//            }
+//            .store(in: &cancellables)
         
         searchPublisher
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .debounce(for: 0.2, scheduler: DispatchQueue.main)
             .removeDuplicates()
             .compactMap({ $0 })
             .sink(receiveValue: {[weak self] (searchString: String) in
                 guard let self = self else { return }
-                CitiesService.shared.searchCities(query: searchString)
-                    .receive(on: DispatchQueue.main)
-                    .sink { filteredNames in
-                        let vc = self.searchController.searchResultsController as? ResultVc
-                        vc?.filteredNames = filteredNames
-                        vc?.tableView.reloadData()
-                    }
-                    .store(in: &self.cancellables)
+                let cities = Database.shared.getCityFromDBtoStringArray(chars: searchString)
+                let vc = self.searchController.searchResultsController as? ResultVc
+                vc?.filteredNames = cities
+                vc?.tableView.reloadData()
+//                CitiesService.shared.searchCities(query: searchString)
+//                    .receive(on: DispatchQueue.main)
+//                    .sink { filteredNames in
+//                        let vc = self.searchController.searchResultsController as? ResultVc
+//                        vc?.filteredNames = filteredNames
+//                        vc?.tableView.reloadData()
+//                    }
+//                    .store(in: &self.cancellables)
             })
             .store(in: &cancellables)
         
@@ -358,6 +368,7 @@ extension MainScreenViewController {
         let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
             CitiesService.shared.deleteFavorite(indexPath)
+            
             self.favoriteCities.remove(at: indexPath!.row - 1)
             self.mainCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)

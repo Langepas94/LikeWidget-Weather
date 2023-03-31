@@ -76,13 +76,14 @@ class AddCityScreen: UIViewController {
         super.viewDidLoad()
         setupUI()
         actionButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        mainCityLabel.text = titleCity?.split(separator: "|")[1].trimmingCharacters(in: .whitespaces) ?? ""
+        mainCityLabel.text = titleCity ?? ""
         getData()
         
     }
     
     @objc func buttonAction() {
-		let name = titleCity!.split(separator: "|")[1].trimmingCharacters(in: .whitespaces)
+		let name = titleCity!
+        Database.shared.addToFavorite(city: name)
 		CitiesService.shared.saveFavorite(name)
 			.sink { _ in
 				
@@ -97,7 +98,7 @@ class AddCityScreen: UIViewController {
     }
     
     func getData() {
-        self.network.fetchData(requestType: .city(city: titleCity?.split(separator: "|")[1].trimmingCharacters(in: .whitespaces) ?? "")) { result in
+        self.network.fetchData(requestType: .city(city: titleCity ?? "")) { result in
             switch result {
                 
             case .success(let data):

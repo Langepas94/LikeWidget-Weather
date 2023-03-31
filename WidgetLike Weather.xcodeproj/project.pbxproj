@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		065538E029BB84A600E77CBC /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 065538DF29BB84A600E77CBC /* SQLite */; };
 		065538E329BB8A6B00E77CBC /* CitiesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065538E229BB8A6B00E77CBC /* CitiesService.swift */; };
+		442D4D8429D7123F00F8A81F /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442D4D8329D7123F00F8A81F /* Database.swift */; };
 		44365D9A29C1AE8400BC96FF /* FilterSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44365D9929C1AE8400BC96FF /* FilterSettingsViewController.swift */; };
 		443E423029ADF55A0046091B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E422F29ADF55A0046091B /* AppDelegate.swift */; };
 		443E423229ADF55A0046091B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443E423129ADF55A0046091B /* SceneDelegate.swift */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		065538E229BB8A6B00E77CBC /* CitiesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesService.swift; sourceTree = "<group>"; };
+		442D4D8329D7123F00F8A81F /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		44365D9929C1AE8400BC96FF /* FilterSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterSettingsViewController.swift; sourceTree = "<group>"; };
 		443E422C29ADF55A0046091B /* WidgetLike Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WidgetLike Weather.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		443E422F29ADF55A0046091B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,14 @@
 			path = "Data Layer";
 			sourceTree = "<group>";
 		};
+		442D4D8229D7122F00F8A81F /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				442D4D8329D7123F00F8A81F /* Database.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
 		44365D9829C1AE5A00BC96FF /* FilterSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,6 +126,7 @@
 		443E422E29ADF55A0046091B /* WidgetLike Weather */ = {
 			isa = PBXGroup;
 			children = (
+				442D4D8229D7122F00F8A81F /* Database */,
 				065538E129BB84E900E77CBC /* Data Layer */,
 				443E425029AE0EB40046091B /* CustomCell */,
 				443E424D29ADF90A0046091B /* Extensions */,
@@ -348,6 +359,7 @@
 				443E423429ADF55A0046091B /* MainScreenViewController.swift in Sources */,
 				4452F7C329CB364100A44149 /* WeatherCellModel.swift in Sources */,
 				443E425929AE2CB60046091B /* ApiKey.swift in Sources */,
+				442D4D8429D7123F00F8A81F /* Database.swift in Sources */,
 				4452F7C129CB09C800A44149 /* FullScreenView.swift in Sources */,
 				4452F7C629CB424800A44149 /* MapViewController.swift in Sources */,
 				443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */,
