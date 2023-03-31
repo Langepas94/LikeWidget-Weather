@@ -59,19 +59,25 @@ class Database {
         }
     }
     
-    public func removeFromFavorite(city: String) {
-        do {
-            let path = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
-            let name = Expression<String>("City")
-            let db = try Connection("\(path)/cities.db")
-            let table = Table(CityTables.favorites.rawValue)
-            let deletingCity = table.filter(name.like("\(city)"))
-            try db.run(deletingCity.delete())
+    public func removeFromFavorite(city: String) -> Future<Void, Error> {
+        Future { promise in
+            do {
+                let path = NSSearchPathForDirectoriesInDomains(
+                    .documentDirectory, .userDomainMask, true
+                ).first!
+                
+                let name = Expression<String>("City")
+                let db = try Connection("\(path)/cities.db")
+                let table = Table(CityTables.favorites.rawValue)
+                let deletingCity = table.filter(name.like("\(city)"))
+                try db.run(deletingCity.delete())
+                promise(.success(()))
+            } catch {
+                promise(.failure(error))
+                print(error)
+            }
             
-        } catch {
-            print(error)
         }
+        
     }
 }

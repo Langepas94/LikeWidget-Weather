@@ -174,11 +174,7 @@ extension MainScreenViewController {
     func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        
-        
         title = "Favorites"
-        
-        
         
         searchController.searchBar.placeholder = "Search for your new favorite city"
         searchController.searchResultsUpdater = self
@@ -362,12 +358,15 @@ extension MainScreenViewController {
 // MARK: - actions
 extension MainScreenViewController {
     @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
-        
+        guard sender.state == .began else { return }
         let point = sender.location(in: self.mainCollection)
         let indexPath = self.mainCollection.indexPathForItem(at: point)
         let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
+        print(indexPath?.item)
+
         let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
-            CitiesService.shared.deleteFavorite(indexPath)
+//                        CitiesService.shared.deleteFavorite(indexPath)
+            
             
             self.favoriteCities.remove(at: indexPath!.row - 1)
             self.mainCollection.reloadData()

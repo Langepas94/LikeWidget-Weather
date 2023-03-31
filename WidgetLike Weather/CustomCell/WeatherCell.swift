@@ -95,7 +95,6 @@ class WeatherCell: UICollectionViewCell {
         super.init(frame: .zero)
         setupView()
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-        
     }
     
     override func prepareForReuse() {
