@@ -33,8 +33,8 @@ class MainScreenViewController: UIViewController {
     var isCitiesLoaded = false
     var isFiltering = false
     var cancellables: Set<AnyCancellable> = []
-    var favoriteCities: [FavoriteCity] = []
-    var filteredCities: [FavoriteCity] = []
+//    var favoriteCities: [FavoriteCity] = []
+//    var filteredCities: [FavoriteCity] = []
     
     private var network = NetworkManager()
     private var searchPublisher = PassthroughSubject<String, Never>()
@@ -76,7 +76,7 @@ class MainScreenViewController: UIViewController {
             let path = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory, .userDomainMask, true
             ).first!
-        print(path)
+//        print(path)
         setupNavigationItem()
         locationManaging.delegate = self
         
@@ -88,11 +88,11 @@ class MainScreenViewController: UIViewController {
                 self.locationManaging.startUpdatingLocation()
             }
         }
+      
+        setupUI()
         let longPress = UILongPressGestureRecognizer()
         longPress.addTarget(self, action: #selector(longDeleteItem))
         self.mainCollection.addGestureRecognizer(longPress)
-        setupUI()
-        
 //        CitiesService.shared.loadCities()
 //            .receive(on: DispatchQueue.main)
 //            .sink { completion in
@@ -108,7 +108,7 @@ class MainScreenViewController: UIViewController {
 //            .store(in: &cancellables)
         
         searchPublisher
-            .debounce(for: 0.2, scheduler: DispatchQueue.main)
+            .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .removeDuplicates()
             .compactMap({ $0 })
             .sink(receiveValue: {[weak self] (searchString: String) in
@@ -127,17 +127,20 @@ class MainScreenViewController: UIViewController {
 //                    .store(in: &self.cancellables)
             })
             .store(in: &cancellables)
-        
-        CitiesService.shared.favoritesAppender
+        Database.shared.favoriteWorker
             .receive(on: DispatchQueue.main)
-            .sink {[weak self] _ in
-                guard let self = self else { return }
-                self.favoriteCities = CitiesService.shared.favorites.map({ name in
-                    return FavoriteCity.init(name: name)
-                })
-                self.mainCollection.reloadData()
-            }
+            .sink(receiveValue: {_ in self.mainCollection.reloadData()})
             .store(in: &cancellables)
+//        CitiesService.shared.favoritesAppender
+//            .receive(on: DispatchQueue.main)
+//            .sink {[weak self] _ in
+//                guard let self = self else { return }
+//                self.favoriteCities = CitiesService.shared.favorites.map({ name in
+//                    return FavoriteCity.init(name: name)
+//                })
+//                self.mainCollection.reloadData()
+//            }
+//            .store(in: &cancellables)
         
     }
     
@@ -192,11 +195,13 @@ extension MainScreenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if isFiltering == false {
-            return favoriteCities.count + 1
-        } else {
-            return (filteredCities.count + 1)
-        }
+//        if isFiltering == false {
+//            return favoriteCities.count + 1
+//        } else {
+//            return (filteredCities.count + 1)
+//        }
+        let result = Database.shared.favoriteCount() + 1
+        return result
         
         
     }
@@ -237,19 +242,22 @@ extension MainScreenViewController: UICollectionViewDataSource {
         
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
         
-        let dataItem: FavoriteCity = {
-            if self.isFiltering == false {
-                return favoriteCities[indexPath.row - 1]
-            } else {
-                return filteredCities[indexPath.row - 1]
-            }
-        }()
+//        let dataItem: FavoriteCity = {
+//            if self.isFiltering == false {
+//                return favoriteCities[indexPath.row - 1]
+//            } else {
+//                return filteredCities[indexPath.row - 1]
+//            }
+//        }()
+        
+        let dataItems = Database.shared.allFavorites()
+        let dataItem = dataItems[indexPath.row - 1]
         
         //        var dataItem = favoriteCities[indexPath.row - 1]
         
         // MARK: - cell configure
-        cell.configureDefault(city: dataItem.name, degrees: "Load", descriptionWeather: "Load", descrptionDegrees: "loading", icon: "")
-        self.network.fetchData(requestType: .city(city: dataItem.name)) { [weak self] result in
+        cell.configureDefault(city: dataItem, degrees: "Load", descriptionWeather: "Load", descrptionDegrees: "loading", icon: "")
+        self.network.fetchData(requestType: .city(city: dataItem)) { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async {
@@ -262,7 +270,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
             case .failure(let error):
                 print(error.localizedDescription)
                 DispatchQueue.main.async {
-                    cell.configureDefault(city: dataItem.name, degrees: "Fail", descriptionWeather: "fail", descrptionDegrees: "", icon: "")
+                    cell.configureDefault(city: dataItem, degrees: "Fail", descriptionWeather: "fail", descrptionDegrees: "", icon: "")
                     
                 }
             }
@@ -274,7 +282,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
 extension MainScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print(indexPath)
+//        print(indexPath)
         // сделал бы лонгпресс в ячейке и наружу выдавал кложером
         
     }
@@ -307,31 +315,31 @@ extension MainScreenViewController: CLLocationManagerDelegate {
     }
 }
 
-struct DataCacheService {
-    
-    var connection: Connection?
-    static private(set) var shared = DataCacheService()
-    
-    private init() {
-        do {
-            guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-            userDirectory.appendPathComponent("DataCache")
-            userDirectory.appendPathExtension("sqlite3")
-            connection = try SQLite.Connection(userDirectory.path)
-//            connection.run
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    public func clear() {
-        guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        userDirectory.appendPathComponent("DataCache")
-        userDirectory.appendPathExtension("sqlite3")
-        try? FileManager.default.removeItem(at: userDirectory)
-        DataCacheService.shared = DataCacheService()
-    }
-}
+//struct DataCacheService {
+//
+//    var connection: Connection?
+//    static private(set) var shared = DataCacheService()
+//    
+//    private init() {
+//        do {
+//            guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+//            userDirectory.appendPathComponent("DataCache")
+//            userDirectory.appendPathExtension("sqlite3")
+//            connection = try SQLite.Connection(userDirectory.path)
+////            connection.run
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+//    }
+//
+//    public func clear() {
+//        guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+//        userDirectory.appendPathComponent("DataCache")
+//        userDirectory.appendPathExtension("sqlite3")
+//        try? FileManager.default.removeItem(at: userDirectory)
+//        DataCacheService.shared = DataCacheService()
+//    }
+//}
 // MARK: - Right bar item (settings)
 extension MainScreenViewController {
     func setupNavigationItem() {
@@ -342,40 +350,49 @@ extension MainScreenViewController {
         let vc = FilterSettingsViewController()
         vc.completion = {[weak self] bool, int in
             guard let self = self else { return }
-            self.filteredCities = self.favoriteCities.filter { favorite in
-                favorite.degrees ?? 0 > Double(int)
-            }
-            self.isFiltering = bool
-            
-            self.setNavigationItem(bool: bool)
-            
-            self.mainCollection.reloadData()
+            //            self.filteredCities = self.favoriteCities.filter { favorite in
+            //                favorite.degrees ?? 0 > Double(int)
+            //            }
+            //            self.isFiltering = bool
+            //
+            //            self.setNavigationItem(bool: bool)
+            //
+            //            self.mainCollection.reloadData()
+            //        }
+            //        present(vc, animated: true)
         }
-        present(vc, animated: true)
     }
 }
+    // MARK: - actions
+    extension MainScreenViewController {
+        @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
+            guard sender.state == .began else { return }
+            let point = sender.location(in: self.mainCollection)
+            let indexPath = self.mainCollection.indexPathForItem(at: point)
+            let item = indexPath!.item
+            let section = indexPath!.section
+            let names = Database.shared.allFavorites()
+            let indexNames = names[indexPath!.item - 1]
+            print("keko - \(indexNames)")
+            let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
 
-// MARK: - actions
-extension MainScreenViewController {
-    @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
-        guard sender.state == .began else { return }
-        let point = sender.location(in: self.mainCollection)
-        let indexPath = self.mainCollection.indexPathForItem(at: point)
-        let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
-        print(indexPath?.item)
+            let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
+//                                  CitiesService.shared.deleteFavorite(indexPath)
+//
+                Database.shared.removeFromFavorite(city: indexNames)
+                
+                self.mainCollection.performBatchUpdates {
+                    self.mainCollection.deleteItems(at: [IndexPath(item: item, section: section)] )
+                    
+                }
 
-        let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
-//                        CitiesService.shared.deleteFavorite(indexPath)
-            
-            
-            self.favoriteCities.remove(at: indexPath!.row - 1)
-            self.mainCollection.reloadData()
-            NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
+                        NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
+                    }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+                    alert.addAction(yesAction)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true)
         }
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-        alert.addAction(yesAction)
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true)
     }
-}
+

@@ -84,13 +84,15 @@ class AddCityScreen: UIViewController {
     @objc func buttonAction() {
 		let name = titleCity!
         Database.shared.addToFavorite(city: name)
-		CitiesService.shared.saveFavorite(name)
-			.sink { _ in
-				
-			} receiveValue: { _ in
-				CitiesService.shared.favoritesAppender.send(name)
-			}
-			.store(in: &cancellables)
+        Database.shared.favoriteWorker.send(name)
+//		CitiesService.shared.saveFavorite(name)
+//			.sink { _ in
+//
+//			} receiveValue: { _ in
+//
+////				CitiesService.shared.favoritesAppender.send(name)
+//			}
+//			.store(in: &cancellables)
         
         NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
 

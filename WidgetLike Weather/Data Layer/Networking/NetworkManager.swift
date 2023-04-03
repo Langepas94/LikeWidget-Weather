@@ -38,13 +38,13 @@ class NetworkManager {
            
              urlString = "\(path)"
             
-            print(path)
+//            print(path)
         }
         
         
        
        guard let url = URL(string: urlString) else {
-           print(urlString)
+//           print(urlString)
             completion(.failure(ResultError.invalidUrl))
                     return
                 }
