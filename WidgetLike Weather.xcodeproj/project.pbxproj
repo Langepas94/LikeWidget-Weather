@@ -29,6 +29,9 @@
 		4452F7C129CB09C800A44149 /* FullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4452F7C029CB09C800A44149 /* FullScreenView.swift */; };
 		4452F7C329CB364100A44149 /* WeatherCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4452F7C229CB364100A44149 /* WeatherCellModel.swift */; };
 		4452F7C629CB424800A44149 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4452F7C529CB424800A44149 /* MapViewController.swift */; };
+		44772AA129DC5F7300A77053 /* CellDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44772AA029DC5F7300A77053 /* CellDataModel.swift */; };
+		44772AA429DC61D000A77053 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44772AA329DC61D000A77053 /* DataService.swift */; };
+		44772AA829DC67F200A77053 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44772AA729DC67F200A77053 /* CellViewModel.swift */; };
 		4488845829B7226800571676 /* MockMassive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488845729B7226800571676 /* MockMassive.swift */; };
 		4488845A29B725F200571676 /* GeoWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4488845929B725F200571676 /* GeoWeatherCell.swift */; };
 		44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B5AEA329B5DDBB00087692 /* ResultVc.swift */; };
@@ -59,6 +62,9 @@
 		4452F7C029CB09C800A44149 /* FullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenView.swift; sourceTree = "<group>"; };
 		4452F7C229CB364100A44149 /* WeatherCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCellModel.swift; sourceTree = "<group>"; };
 		4452F7C529CB424800A44149 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		44772AA029DC5F7300A77053 /* CellDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDataModel.swift; sourceTree = "<group>"; };
+		44772AA329DC61D000A77053 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		44772AA729DC67F200A77053 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
 		4488845729B7226800571676 /* MockMassive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMassive.swift; sourceTree = "<group>"; };
 		4488845929B725F200571676 /* GeoWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoWeatherCell.swift; sourceTree = "<group>"; };
 		44B5AEA329B5DDBB00087692 /* ResultVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultVc.swift; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 		065538E129BB84E900E77CBC /* Data Layer */ = {
 			isa = PBXGroup;
 			children = (
+				44772AA229DC619A00A77053 /* DataService */,
 				443E425329AE2BEB0046091B /* Networking */,
 			);
 			path = "Data Layer";
@@ -177,6 +184,8 @@
 				443E425129AE0EBF0046091B /* WeatherCell.swift */,
 				4488845929B725F200571676 /* GeoWeatherCell.swift */,
 				4452F7C229CB364100A44149 /* WeatherCellModel.swift */,
+				44772AA029DC5F7300A77053 /* CellDataModel.swift */,
+				44772AA729DC67F200A77053 /* CellViewModel.swift */,
 			);
 			path = CustomCell;
 			sourceTree = "<group>";
@@ -223,6 +232,14 @@
 				4452F7C529CB424800A44149 /* MapViewController.swift */,
 			);
 			path = MapView;
+			sourceTree = "<group>";
+		};
+		44772AA229DC619A00A77053 /* DataService */ = {
+			isa = PBXGroup;
+			children = (
+				44772AA329DC61D000A77053 /* DataService.swift */,
+			);
+			path = DataService;
 			sourceTree = "<group>";
 		};
 		44B5AEA529B5E89400087692 /* TableOfCities */ = {
@@ -352,6 +369,7 @@
 				4488845829B7226800571676 /* MockMassive.swift in Sources */,
 				4452F7BC29C87EA600A44149 /* TopFilteredView.swift in Sources */,
 				065538E329BB8A6B00E77CBC /* CitiesService.swift in Sources */,
+				44772AA829DC67F200A77053 /* CellViewModel.swift in Sources */,
 				44F328B029C335E80011C296 /* FilterDegreesService.swift in Sources */,
 				4452F7BE29C8B2FE00A44149 /* BarButtonItem + extension.swift in Sources */,
 				44B5AEA429B5DDBB00087692 /* ResultVc.swift in Sources */,
@@ -362,10 +380,12 @@
 				442D4D8429D7123F00F8A81F /* Database.swift in Sources */,
 				4452F7C129CB09C800A44149 /* FullScreenView.swift in Sources */,
 				4452F7C629CB424800A44149 /* MapViewController.swift in Sources */,
+				44772AA429DC61D000A77053 /* DataService.swift in Sources */,
 				443E425729AE2C2A0046091B /* WeatherDataModel.swift in Sources */,
 				443E424F29ADF9190046091B /* UIcolor + extension.swift in Sources */,
 				443E425229AE0EBF0046091B /* WeatherCell.swift in Sources */,
 				443E423029ADF55A0046091B /* AppDelegate.swift in Sources */,
+				44772AA129DC5F7300A77053 /* CellDataModel.swift in Sources */,
 				4488845A29B725F200571676 /* GeoWeatherCell.swift in Sources */,
 				4452F7B929C8738E00A44149 /* FAvoriteCityModel.swift in Sources */,
 				443E423229ADF55A0046091B /* SceneDelegate.swift in Sources */,

@@ -13,6 +13,8 @@ import SnapKit
 
 class WeatherCell: UICollectionViewCell {
     
+    
+    
     static let cellId = "WeatherCell"
     
     var timer: Timer?
