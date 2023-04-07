@@ -8,17 +8,32 @@
 import Foundation
 import UIKit
 
-enum CellDataModel {
-    case initial
-    case loading(Data)
-    case success(Data)
-    case failure(Data)
+struct CellDataModel {
+     
     
-    struct Data {
         let cityName: String?
         let degrees: String?
         let icon: String?
         let descriptionDegrees: String?
         let timeZone: Int?
+    
+    init(cityName: String? = nil, degrees: String? = nil, icon: String? = nil, descriptionDegrees: String? = nil, timeZone: Int? = nil) {
+       self.cityName = cityName
+       self.degrees = degrees
+       self.icon = icon
+       self.descriptionDegrees = descriptionDegrees
+       self.timeZone = timeZone
+   }
+    
+        init?(currentData: WeatherDataModel) {
+            self.cityName = currentData.city?.name ?? ""
+            self.degrees = String(currentData.list?[0].main?.temp ?? 0.0)
+            self.descriptionDegrees = currentData.list?[0].weather?[0].description ?? ""
+
+            self.icon = currentData.list?[0].weather?[0].icon
+            self.timeZone = currentData.city?.timezone
+        }
+       
+ 
     }
-}
+

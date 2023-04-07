@@ -71,7 +71,7 @@ class AddCityScreen: UIViewController {
     var callCity: ((String?) -> ())?
     var titleCity: String?
     var network = NetworkManager()
-    
+    var dataArray: CellDataModel?
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -83,7 +83,7 @@ class AddCityScreen: UIViewController {
     
     @objc func buttonAction() {
 		let name = titleCity!
-        Database.shared.addToFavorite(city: name)
+        Database.shared.addToFavorite(city: dataArray!)
         Database.shared.favoriteWorker.send(name)
 //		CitiesService.shared.saveFavorite(name)
 //			.sink { _ in
@@ -109,6 +109,9 @@ class AddCityScreen: UIViewController {
                     self.degreesLabel.text = String(data.list![0].main?.temp ?? 0.0)
                     self.weatherImage.image = UIImage(named: data.list?[0].weather?[0].icon ?? "")
                     self.descriptionWeatherLabel.text = data.list?[0].weather?[0].description ?? ""
+                    
+//                    self.dataArray = CellDataModel(currentData: data)
+                    self.dataArray = CellDataModel(currentData: data)
                 }
                 
             case .failure(let error):

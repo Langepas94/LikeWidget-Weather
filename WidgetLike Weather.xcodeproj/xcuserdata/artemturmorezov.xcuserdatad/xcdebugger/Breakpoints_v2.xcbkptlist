@@ -14,8 +14,8 @@
             filePath = "WidgetLike Weather/View/MainView/MainScreenViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "368"
-            endingLineNumber = "368"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "longDeleteItem(sender:)"
             landmarkType = "7">
          </BreakpointContent>

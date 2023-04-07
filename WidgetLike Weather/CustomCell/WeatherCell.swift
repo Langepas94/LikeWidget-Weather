@@ -13,7 +13,11 @@ import SnapKit
 
 class WeatherCell: UICollectionViewCell {
     
-    
+    var cityItemModel: CellCityViewModel? {
+        didSet {
+            setupCells()
+        }
+    }
     
     static let cellId = "WeatherCell"
     
@@ -96,7 +100,7 @@ class WeatherCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+//        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
     override func prepareForReuse() {
@@ -104,51 +108,49 @@ class WeatherCell: UICollectionViewCell {
         degreesLabel.text = ""
         mainView.backgroundColor = .white
     }
-    // когда функция огромная по параметрам то проще структуру сделать и структуру передавать в функцию
-        func configureDefault(city: String, degrees: String, descriptionWeather: String, descrptionDegrees: String, icon: String?) {
-            self.cityNameLabel.text = city
-            self.degreesLabel.text = degrees + "°"
-            self.descriptionWeatherLabel.text = descriptionWeather
-            self.descriptionDegreesLabel.text = descrptionDegrees
-            self.weatherImage.image = UIImage(named: icon ?? "")
+    
+    
+    func setupCells() {
+        guard let cityItemModel = cityItemModel else { return }
+        
+        self.cityNameLabel.text = cityItemModel.cityName
+        self.degreesLabel.text = cityItemModel.degrees
+        self.descriptionWeatherLabel.text = cityItemModel.description
+        self.weatherImage.image = UIImage(named: cityItemModel.icon)
+//        self.timezone = TimeZone(secondsFromGMT: cityItemModel.timezone)
+        NotificationCenter.default.addObserver(forName: Notification.Name("timeChange"), object: nil, queue: .some(.current ?? .main)) { notification in
+            self.timeLabel.text = cityItemModel.timeLabels
         }
-    func configure(data: WeatherCellModel) {
-        self.cityNameLabel.text = data.city
-        self.degreesLabel.text = data.degrees + "°"
-        self.descriptionWeatherLabel.text = data.descriptionWeather
-        self.descriptionDegreesLabel.text = data.descrptionDegrees
-        self.weatherImage.image = UIImage(named: data.icon ?? "")
-//        self.timeLabel.text = "\(data.timeZone ?? 0)"
-        self.timezone = TimeZone(secondsFromGMT: data.timeZone ?? 0)
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func updateTime() {
-        let date = Date()
-        
-        let dateFormatterHour = DateFormatter()
-        dateFormatterHour.timeZone = self.timezone
-        dateFormatterHour.dateFormat = "HH"
-        let hourString = dateFormatterHour.string(from: date)
-        let formattedHourString = String(format: "%02d", Int(hourString)!)
-        
-        let dateFormatterMinute = DateFormatter()
-        dateFormatterMinute.timeZone = self.timezone
-        dateFormatterMinute.dateFormat = "mm"
-        let minuteString = dateFormatterMinute.string(from: date)
-        let formattedMinuteString = String(format: "%02d", Int(minuteString)!)
-        
-        self.timeLabel.text = "\(formattedHourString): \(formattedMinuteString)"
-        
-        if Int(hourString)! >= 18 || Int(hourString)! <= 5  {
-            self.mainView.backgroundColor = .systemFill
-        } else {
-            self.mainView.backgroundColor = .white
-        }
-    }
+//    @objc func updateTime() {
+//        let date = Date()
+//
+//        let dateFormatterHour = DateFormatter()
+//        dateFormatterHour.timeZone = self.timezone
+//        dateFormatterHour.dateFormat = "HH"
+//        let hourString = dateFormatterHour.string(from: date)
+//        let formattedHourString = String(format: "%02d", Int(hourString)!)
+//
+//        let dateFormatterMinute = DateFormatter()
+//        dateFormatterMinute.timeZone = self.timezone
+//        dateFormatterMinute.dateFormat = "mm"
+//        let minuteString = dateFormatterMinute.string(from: date)
+//        let formattedMinuteString = String(format: "%02d", Int(minuteString)!)
+//
+//        self.timeLabel.text = "\(formattedHourString): \(formattedMinuteString)"
+//
+//        if Int(hourString)! >= 18 || Int(hourString)! <= 5  {
+//            self.mainView.backgroundColor = .systemFill
+//        } else {
+//            self.mainView.backgroundColor = .white
+//        }
+//    }
 }
 
 // MARK: - setupView

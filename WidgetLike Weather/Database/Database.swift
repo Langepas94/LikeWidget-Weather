@@ -13,11 +13,13 @@ import SQLite3
 enum CityTables: String {
     case base = "tabla"
     case favorites = "Favorites"
+    case filtered = "Filtering"
 }
 
 class Database {
     static let shared = Database()
     
+    var network = NetworkManager()
     
     public var favoriteWorker = PassthroughSubject<String, Never>()
     public func getCityFromDBtoStringArray(chars: String) -> [String]  {
@@ -46,17 +48,23 @@ class Database {
     
     
     
-    public func addToFavorite(city: String) {
+    public func addToFavorite(city: CellDataModel) {
+        
+       
         do {
             let id = Expression<Int>("id")
             let path = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory, .userDomainMask, true
             ).first!
             let name = Expression<String>("City")
+            let degrees = Expression<String>("degrees")
+            let icon = Expression<String>("icon")
+            let descriptionDegrees = Expression<String>("descriptionDegrees")
+            let timeZone = Expression<Int>("timeZone")
             let db = try Connection("\(path)/cities.db")
             let table = Table(CityTables.favorites.rawValue)
             
-            try db.run(table.insert(name <- city))
+            try db.run(table.insert(name <- city.cityName ?? "", degrees <- city.degrees ?? "", icon <- city.icon ?? "", descriptionDegrees <- city.descriptionDegrees ?? "", timeZone <- city.timeZone ?? 0))
        
             
             
@@ -109,55 +117,108 @@ class Database {
         return result
     }
     
-    //    public func removeFromFavorite(index: Int) -> Future<Void, Error> {
-    //        Future { promise in
-    //            do {
-    //                let path = NSSearchPathForDirectoriesInDomains(
-    //                    .documentDirectory, .userDomainMask, true
-    //                ).first!
-    //
-    //                let name = Expression<String>("City")
-    //                let db = try Connection("\(path)/cities.db")
-    //                let table = Table(CityTables.favorites.rawValue)
-    ////                let deletingCity = table.filter(name.index == index)
-    ////                let deletingCity = table.filter()
-    //                let deleteStatementString = "DELETE FROM Favorites WHERE id = \(index);"
-    //
-    //                try db.run(deleteStatementString)
-    //                promise(.success(()))
-    //            } catch {
-    //                promise(.failure(error))
-    //                print(error)
-    //            }
-    //
-    //        }
-    //
-    //    }
-    
-    public func deleteFavorite(_ index: Int?) -> Future<Void, Error> {
-        Future { promise in
-            DispatchQueue.global().async {
-                do {
-                    
-                    let path = NSSearchPathForDirectoriesInDomains(
-                        .documentDirectory, .userDomainMask, true
-                    ).first!
-                    
-                    let name = Expression<String>("City")
-                    let db = try Connection("\(path)/cities.db")
-                    let table = Table(CityTables.favorites.rawValue)
-                    
-                    let deletingCity = table.filter(rowid == 2)
-                    
-                    try db.run(deletingCity.delete())
-                    print("mem \(deletingCity)")
-                    promise(.success(()))
-                } catch {
-                    promise(.failure(error))
-                }
+    public func allFavoritesModels() -> [CellCityViewModel] {
+        var result: [CellCityViewModel] = []
+        
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(
+                .documentDirectory, .userDomainMask, true
+            ).first!
+            let name = Expression<String>("City")
+            let degrees = Expression<String>("degrees")
+            let icon = Expression<String>("icon")
+            let descriptionDegrees = Expression<String>("descriptionDegrees")
+            let timeZone = Expression<Int>("timeZone")
+            let db = try Connection("\(path)/cities.db")
+            let table = Table(CityTables.favorites.rawValue)
+            
+            
+            for city in try db.prepare(table) {
+                let viewModelItem = CellCityViewModel(item: CellDataModel(cityName: city[name], degrees: city[degrees], icon: city[icon], descriptionDegrees: city[descriptionDegrees], timeZone: city[timeZone]))
+                result.append(viewModelItem)
             }
+            
+        } catch {
+            print(error)
+        }
+        
+        return result
+    }
+    public func updateFavoritesModels(closure: @escaping([CellCityViewModel]) -> Void)  {
+        var resultArray: [CellCityViewModel] = []
+        
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(
+                .documentDirectory, .userDomainMask, true
+            ).first!
+            let name = Expression<String>("City")
+            let degrees = Expression<String>("degrees")
+            let icon = Expression<String>("icon")
+            let descriptionDegrees = Expression<String>("descriptionDegrees")
+            let timeZone = Expression<Int>("timeZone")
+            let db = try Connection("\(path)/cities.db")
+            let table = Table(CityTables.favorites.rawValue)
+            
+            
+            for city in try db.prepare(table) {
+                print("mamacita \(city)")
+                self.network.fetchData(requestType: .city(city: city[name])) { [weak self] result in
+                    switch result {
+                    case .success(let data):
+                        let viewModelItem = CellCityViewModel(item: CellDataModel(currentData: data)!)
+                        let nameCity = viewModelItem.cityName
+                        let degreessCity = viewModelItem.degrees
+                        let iconCity = viewModelItem.icon
+                        let descriptionDegreesCity = viewModelItem.description
+                        let timeZoneCity = viewModelItem.timezone
+                        
+                        let filt = table.filter( name.like("\(city[name])%") )
+                        try? db.run(filt.update(degrees <- degreessCity, name <- nameCity, icon <- iconCity, descriptionDegrees <- descriptionDegreesCity, timeZone <- timeZoneCity ))
+                        closure(resultArray)
+                        resultArray.append(viewModelItem)
+                    case .failure(let err):
+                        print(err.localizedDescription)
+                    }
+                }
+                
+           
+            }
+            
+        } catch {
+            print(error)
+        }
+        
+        
+    }
+    
+    public func filteringFavorites(degree: String) {
+        
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(
+                .documentDirectory, .userDomainMask, true
+            ).first!
+            let db = try Connection("\(path)/cities.db")
+            let table = Table(CityTables.favorites.rawValue)
+            let destinationTable = Table(CityTables.filtered.rawValue)
+            let degrees = Expression<String>("degrees")
+            
+            let filter = table.filter(degrees >= degree)
+            let all = Array(try db.prepare(filter))
+//            print("mar \(all)")
+            for i in try db.prepare(filter) {
+                print("mar \(i)")
+            }
+
+           
+
+
+
+            
+        } catch {
+            print(error.localizedDescription)
         }
     }
+    
     public func removeFromFavorite(city: String)  {
         
         do {

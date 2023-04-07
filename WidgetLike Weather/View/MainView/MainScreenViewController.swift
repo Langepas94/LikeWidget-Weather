@@ -33,8 +33,8 @@ class MainScreenViewController: UIViewController {
     var isCitiesLoaded = false
     var isFiltering = false
     var cancellables: Set<AnyCancellable> = []
-//    var favoriteCities: [FavoriteCity] = []
-//    var filteredCities: [FavoriteCity] = []
+    //    var favoriteCities: [FavoriteCity] = []
+    //    var filteredCities: [FavoriteCity] = []
     
     private var network = NetworkManager()
     private var searchPublisher = PassthroughSubject<String, Never>()
@@ -51,11 +51,18 @@ class MainScreenViewController: UIViewController {
     
     private var addCityVC: AddCityScreen!
     
+    let dataService = DataService()
+    
+    private var cellModel: [CellCityViewModel] = []
+    
     override func viewDidLoad() {
         
+        super.viewDidLoad()
+        configureViewModels()
+        setupRefresh()
         switch locationManaging.authorizationStatus {
         case .notDetermined:
-                    locationManaging.requestWhenInUseAuthorization()
+            locationManaging.requestWhenInUseAuthorization()
         case .restricted:
             locationManaging.requestWhenInUseAuthorization()
         case .denied:
@@ -68,44 +75,28 @@ class MainScreenViewController: UIViewController {
             break
         }
         
-        
-        
-        super.viewDidLoad()
-        
-        
-            let path = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
-//        print(path)
+        let path = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory, .userDomainMask, true
+        ).first!
+        //        print(path)
         setupNavigationItem()
         locationManaging.delegate = self
+        let ac = Database.shared.filteringFavorites(degree: "230")
+        print("items \(ac)")
         
-
-//        locationManaging.requestWhenInUseAuthorization()
+        //        locationManaging.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
             if CLLocationManager.locationServicesEnabled() {
                 self.locationManaging.requestLocation()
                 self.locationManaging.startUpdatingLocation()
             }
         }
-      
+        
         setupUI()
         let longPress = UILongPressGestureRecognizer()
         longPress.addTarget(self, action: #selector(longDeleteItem))
         self.mainCollection.addGestureRecognizer(longPress)
-//        CitiesService.shared.loadCities()
-//            .receive(on: DispatchQueue.main)
-//            .sink { completion in
-//                switch completion {
-//                case .finished: break
-//                case .failure(let error):
-//                    print(error.localizedDescription)
-//                }
-//            } receiveValue: {[weak self] names in
-//                guard let self = self else { return }
-//                self.isCitiesLoaded = true
-//            }
-//            .store(in: &cancellables)
+        
         
         searchPublisher
             .debounce(for: 0.1, scheduler: DispatchQueue.main)
@@ -117,30 +108,15 @@ class MainScreenViewController: UIViewController {
                 let vc = self.searchController.searchResultsController as? ResultVc
                 vc?.filteredNames = cities
                 vc?.tableView.reloadData()
-//                CitiesService.shared.searchCities(query: searchString)
-//                    .receive(on: DispatchQueue.main)
-//                    .sink { filteredNames in
-//                        let vc = self.searchController.searchResultsController as? ResultVc
-//                        vc?.filteredNames = filteredNames
-//                        vc?.tableView.reloadData()
-//                    }
-//                    .store(in: &self.cancellables)
+                
             })
             .store(in: &cancellables)
         Database.shared.favoriteWorker
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: {_ in self.mainCollection.reloadData()})
+            .sink(receiveValue: {_ in
+                self.configureViewModels()
+                self.mainCollection.reloadData()})
             .store(in: &cancellables)
-//        CitiesService.shared.favoritesAppender
-//            .receive(on: DispatchQueue.main)
-//            .sink {[weak self] _ in
-//                guard let self = self else { return }
-//                self.favoriteCities = CitiesService.shared.favorites.map({ name in
-//                    return FavoriteCity.init(name: name)
-//                })
-//                self.mainCollection.reloadData()
-//            }
-//            .store(in: &cancellables)
         
     }
     
@@ -168,8 +144,16 @@ class MainScreenViewController: UIViewController {
         return section
     }
     
-    
-    
+    func configureViewModels() {
+        
+        DataService.shared.preload {  closure in
+            DispatchQueue.main.async {
+                self.cellModel = closure
+                print("memm \(closure)")
+                self.mainCollection.reloadData()
+            }
+        }
+    }
     
 }
 // MARK: - setupUI func
@@ -195,13 +179,14 @@ extension MainScreenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-//        if isFiltering == false {
-//            return favoriteCities.count + 1
-//        } else {
-//            return (filteredCities.count + 1)
-//        }
-        let result = Database.shared.favoriteCount() + 1
-        return result
+        //        if isFiltering == false {
+        //            return favoriteCities.count + 1
+        //        } else {
+        //            return (filteredCities.count + 1)
+        //        }
+        //        let result = Database.shared.favoriteCount() + 1
+        //        return result
+        cellModel.count + 1
         
         
     }
@@ -209,7 +194,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // MARK: - geoCell
-      
+        
         if indexPath.row == 0 {
             let geoCell = mainCollection.dequeueReusableCell(withReuseIdentifier: GeoWeatherCell.cellId, for: indexPath) as! GeoWeatherCell
             
@@ -242,39 +227,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
         
         let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
         
-//        let dataItem: FavoriteCity = {
-//            if self.isFiltering == false {
-//                return favoriteCities[indexPath.row - 1]
-//            } else {
-//                return filteredCities[indexPath.row - 1]
-//            }
-//        }()
-        
-        let dataItems = Database.shared.allFavorites()
-        let dataItem = dataItems[indexPath.row - 1]
-        
-        //        var dataItem = favoriteCities[indexPath.row - 1]
-        
-        // MARK: - cell configure
-        cell.configureDefault(city: dataItem, degrees: "Load", descriptionWeather: "Load", descrptionDegrees: "loading", icon: "")
-        self.network.fetchData(requestType: .city(city: dataItem)) { [weak self] result in
-            switch result {
-            case .success(let data):
-                DispatchQueue.main.async {
-                    guard let currentData = WeatherCellModel(currentData: data) else { return }
-//                    let degrees = data.list![0].main?.temp
-//                    dataItem.degrees = degrees
-                    cell.configure(data: currentData)
-                    
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-                DispatchQueue.main.async {
-                    cell.configureDefault(city: dataItem, degrees: "Fail", descriptionWeather: "fail", descrptionDegrees: "", icon: "")
-                    
-                }
-            }
-        }
+        cell.cityItemModel = cellModel[indexPath.row - 1]
         return cell
     }
 }
@@ -282,7 +235,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
 extension MainScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-//        print(indexPath)
+        //        print(indexPath)
         // сделал бы лонгпресс в ячейке и наружу выдавал кложером
         
     }
@@ -363,36 +316,57 @@ extension MainScreenViewController {
         }
     }
 }
-    // MARK: - actions
-    extension MainScreenViewController {
-        @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
-            guard sender.state == .began else { return }
-            let point = sender.location(in: self.mainCollection)
-            let indexPath = self.mainCollection.indexPathForItem(at: point)
-            let item = indexPath!.item
-            let section = indexPath!.section
-            let names = Database.shared.allFavorites()
-            let indexNames = names[indexPath!.item - 1]
-            print("keko - \(indexNames)")
-            let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
-
-            let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
-//                                  CitiesService.shared.deleteFavorite(indexPath)
-//
-                Database.shared.removeFromFavorite(city: indexNames)
-                
-                self.mainCollection.performBatchUpdates {
-                    self.mainCollection.deleteItems(at: [IndexPath(item: item, section: section)] )
-                    
-                }
-
-                        NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
-                    }
-
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-                    alert.addAction(yesAction)
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true)
+// MARK: - actions
+extension MainScreenViewController {
+    @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
+        guard sender.state == .began else { return }
+        let point = sender.location(in: self.mainCollection)
+        let indexPath = self.mainCollection.indexPathForItem(at: point)
+        let item = indexPath!.item
+        let section = indexPath!.section
+        let names = Database.shared.allFavorites()
+        let indexNames = names[indexPath!.item - 1]
+        
+        let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
+            //                                  CitiesService.shared.deleteFavorite(indexPath)
+            //
+            print("kuka \(indexNames)")
+            Database.shared.removeFromFavorite(city: indexNames)
+            
+            //            self.mainCollection.performBatchUpdates {
+            //                self.mainCollection.deleteItems(at: [IndexPath(item: item, section: section)] )
+            //
+            //            }
+            self.configureViewModels()
+            NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
         }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(yesAction)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true)
     }
+}
 
+// MARK: - Refresh Controller
+extension MainScreenViewController {
+    func setupRefresh() {
+        self.mainCollection.refreshControl = UIRefreshControl()
+        self.mainCollection.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+    }
+    
+    @objc func refreshData() {
+        
+        DispatchQueue.main.async {
+            DataService.shared.updatingData { closure in
+                DispatchQueue.main.async {
+                    print("memm \(closure)")
+                }
+            }
+            self.configureViewModels()
+        }
+        self.mainCollection.refreshControl?.endRefreshing()
+    }
+}

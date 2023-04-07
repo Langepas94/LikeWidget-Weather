@@ -8,9 +8,28 @@
 import Foundation
 import UIKit
 
+// get networkFetch
+
+
 class DataService {
     
-    public func getCitiesNames() {
-        
+    var timer: Timer?
+    
+    static var shared = DataService()
+    let network = NetworkManager()
+
+    func updatingData(closure: @escaping([CellCityViewModel])-> Void) {
+        let result = Database.shared.updateFavoritesModels { result in
+            closure(result)
+        }
     }
+    
+    func preload(closure: @escaping([CellCityViewModel])-> Void)  {
+        
+        let result = Database.shared.allFavoritesModels()
+        closure(result)
+       
+    }
+  
 }
+

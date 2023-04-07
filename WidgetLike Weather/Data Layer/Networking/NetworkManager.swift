@@ -66,7 +66,7 @@ class NetworkManager {
 				} else {
 					jsonStr = String(data: data, encoding: .utf8)
 				}
-				print(jsonStr ?? "No data")
+//				print(jsonStr ?? "No data")
                 let result = try JSONDecoder().decode(WeatherDataModel.self, from: data)
                             completion(.success(result))
                 
