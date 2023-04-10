@@ -235,8 +235,10 @@ extension MainScreenViewController: UICollectionViewDataSource {
 extension MainScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        //        print(indexPath)
-        // сделал бы лонгпресс в ячейке и наружу выдавал кложером
+        let vc = PageViewController()
+        vc.currentPageNumber = indexPath.row - 1
+        vc.cityItemModel = cellModel
+        present(vc, animated: true)
         
     }
 }

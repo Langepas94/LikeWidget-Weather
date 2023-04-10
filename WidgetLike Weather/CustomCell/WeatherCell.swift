@@ -109,7 +109,9 @@ class WeatherCell: UICollectionViewCell {
         mainView.backgroundColor = .white
     }
     
-    
+    // Лонгтап удаление перенести в ячейку
+    // через точки не листается
+    // таймер в одном месте 
     func setupCells() {
         guard let cityItemModel = cityItemModel else { return }
         

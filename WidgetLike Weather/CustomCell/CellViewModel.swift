@@ -41,7 +41,7 @@ class CellCityViewModel {
     init(item: CellDataModel) {
         self.cityItem = item
         
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+//        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
         
     }
     

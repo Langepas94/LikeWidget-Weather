@@ -21,6 +21,19 @@ class Database {
     
     var network = NetworkManager()
     
+    
+    
+    let db: Connection = {
+        let path = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory, .userDomainMask, true
+        ).first!
+        do {
+         return try Connection("\(path)/cities.db")
+        } catch {
+            fatalError()
+        }
+    }()
+    
     public var favoriteWorker = PassthroughSubject<String, Never>()
     public func getCityFromDBtoStringArray(chars: String) -> [String]  {
         
@@ -206,13 +219,8 @@ class Database {
             let all = Array(try db.prepare(filter))
 //            print("mar \(all)")
             for i in try db.prepare(filter) {
-                print("mar \(i)")
+                
             }
-
-           
-
-
-
             
         } catch {
             print(error.localizedDescription)
@@ -269,4 +277,20 @@ class Database {
         
         
     }
+    
+    init(network: NetworkManager = NetworkManager(), favoriteWorker: PassthroughSubject<String, Never> = PassthroughSubject<String, Never>()) {
+        self.network = network
+        self.favoriteWorker = favoriteWorker
+        
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(
+                .documentDirectory, .userDomainMask, true
+            ).first!
+            
+            let table = Table(CityTables.base.rawValue)
+        } catch {
+            
+        }
+    }
 }
+
