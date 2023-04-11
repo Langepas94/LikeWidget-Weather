@@ -41,8 +41,8 @@ class MapViewController: UIViewController {
     }
     
     func annotationsCreator() {
-        self.favoriteList = CitiesService.shared.favorites
-        CitiesService.shared.favorites.forEach { city in
+        self.favoriteList = Database.shared.allFavorites()
+        Database.shared.allFavorites().forEach { city in
             self.network.fetchData(requestType: .city(city: city)) { result in
                 switch result {
                 case .success(let data ):

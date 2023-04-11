@@ -77,7 +77,7 @@ class Database {
             let db = try Connection("\(path)/cities.db")
             let table = Table(CityTables.favorites.rawValue)
             
-            try db.run(table.insert(name <- city.cityName ?? "", degrees <- city.degrees ?? "", icon <- city.icon ?? "", descriptionDegrees <- city.descriptionDegrees ?? "", timeZone <- city.timeZone ?? 0))
+            try db.run(table.insert(name <- city.cityName ?? "", degrees <- String(city.degrees ?? 0), icon <- city.icon ?? "", descriptionDegrees <- city.descriptionDegrees ?? "", timeZone <- city.timeZone ?? 0))
        
             
             
@@ -147,7 +147,7 @@ class Database {
             
             
             for city in try db.prepare(table) {
-                let viewModelItem = CellCityViewModel(item: CellDataModel(cityName: city[name], degrees: city[degrees], icon: city[icon], descriptionDegrees: city[descriptionDegrees], timeZone: city[timeZone]))
+                let viewModelItem = CellCityViewModel(item: CellDataModel(cityName: city[name], degrees: Int(city[degrees]), icon: city[icon], descriptionDegrees: city[descriptionDegrees], timeZone: city[timeZone]))
                 result.append(viewModelItem)
             }
             
@@ -180,13 +180,16 @@ class Database {
                     case .success(let data):
                         let viewModelItem = CellCityViewModel(item: CellDataModel(currentData: data)!)
                         let nameCity = viewModelItem.cityName
-                        let degreessCity = viewModelItem.degrees
+                        let formatter = NumberFormatter()
+                        formatter.minimumFractionDigits = 0
+                        formatter.maximumFractionDigits = 1
+                        let degreessCity =  viewModelItem.degrees
                         let iconCity = viewModelItem.icon
                         let descriptionDegreesCity = viewModelItem.description
                         let timeZoneCity = viewModelItem.timezone
                         
                         let filt = table.filter( name.like("\(city[name])%") )
-                        try? db.run(filt.update(degrees <- degreessCity, name <- nameCity, icon <- iconCity, descriptionDegrees <- descriptionDegreesCity, timeZone <- timeZoneCity ))
+                        try? db.run(filt.update(degrees <- String(degreessCity), name <- nameCity, icon <- iconCity, descriptionDegrees <- descriptionDegreesCity, timeZone <- timeZoneCity ))
                         closure(resultArray)
                         resultArray.append(viewModelItem)
                     case .failure(let err):
@@ -201,11 +204,10 @@ class Database {
             print(error)
         }
         
-        
     }
     
-    public func filteringFavorites(degree: String) {
-        
+    public func filteringFavorites(degree: String) -> [CellCityViewModel] {
+        var result: [CellCityViewModel] = []
         do {
             let path = NSSearchPathForDirectoriesInDomains(
                 .documentDirectory, .userDomainMask, true
@@ -213,18 +215,25 @@ class Database {
             let db = try Connection("\(path)/cities.db")
             let table = Table(CityTables.favorites.rawValue)
             let destinationTable = Table(CityTables.filtered.rawValue)
+            let name = Expression<String>("City")
             let degrees = Expression<String>("degrees")
+            let icon = Expression<String>("icon")
+            let descriptionDegrees = Expression<String>("descriptionDegrees")
+            let timeZone = Expression<Int>("timeZone")
             
             let filter = table.filter(degrees >= degree)
-            let all = Array(try db.prepare(filter))
-//            print("mar \(all)")
+            
+            
             for i in try db.prepare(filter) {
-                
+                let viewModelItem = CellCityViewModel(item: CellDataModel(cityName: i[name], degrees: Int(i[degrees]), icon: i[icon], descriptionDegrees: i[descriptionDegrees], timeZone: i[timeZone]))
+                result.append(viewModelItem)
             }
             
         } catch {
             print(error.localizedDescription)
         }
+        print("nuka \(result)")
+        return result
     }
     
     public func removeFromFavorite(city: String)  {

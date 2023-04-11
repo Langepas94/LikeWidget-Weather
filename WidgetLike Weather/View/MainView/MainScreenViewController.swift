@@ -81,8 +81,8 @@ class MainScreenViewController: UIViewController {
         //        print(path)
         setupNavigationItem()
         locationManaging.delegate = self
-        let ac = Database.shared.filteringFavorites(degree: "230")
-        print("items \(ac)")
+        
+        
         
         //        locationManaging.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
@@ -179,13 +179,6 @@ extension MainScreenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        //        if isFiltering == false {
-        //            return favoriteCities.count + 1
-        //        } else {
-        //            return (filteredCities.count + 1)
-        //        }
-        //        let result = Database.shared.favoriteCount() + 1
-        //        return result
         cellModel.count + 1
         
         
@@ -305,19 +298,25 @@ extension MainScreenViewController {
         let vc = FilterSettingsViewController()
         vc.completion = {[weak self] bool, int in
             guard let self = self else { return }
-            //            self.filteredCities = self.favoriteCities.filter { favorite in
-            //                favorite.degrees ?? 0 > Double(int)
-            //            }
-            //            self.isFiltering = bool
-            //
-            //            self.setNavigationItem(bool: bool)
-            //
-            //            self.mainCollection.reloadData()
-            //        }
-            //        present(vc, animated: true)
+            DataService.shared.filtering(degree: String(int)) {  closure in
+                DispatchQueue.main.async {
+                    self.cellModel = closure
+                    print("memm \(closure)")
+                    self.mainCollection.reloadData()
+                }
+            }
+                        self.isFiltering = bool
+            
+                        self.setNavigationItem(bool: bool)
+            
+                        self.mainCollection.reloadData()
+               
+                    }
+        self.present(vc, animated: true)
         }
+        
     }
-}
+
 // MARK: - actions
 extension MainScreenViewController {
     @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {

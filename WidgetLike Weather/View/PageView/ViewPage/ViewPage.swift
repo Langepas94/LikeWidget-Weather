@@ -104,37 +104,12 @@ class ViewPage: UIView {
     
     func configure(item: CellCityViewModel) {
         self.cityNameLabel.text = item.cityName
-        self.degreesLabel.text = item.degrees
+        self.degreesLabel.text = String(item.degrees) + "°"
         self.descriptionWeatherLabel.text = item.description
         self.weatherImage.image = UIImage(named: item.icon)
 
     }
     
-//    func configureCells() {
-//        self.network.fetchData(requestType: .city(city: cityNameLabel.text ?? "")) { result in
-//            switch result {
-//            case .success(let data):
-//                DispatchQueue.main.async {
-////                    print("mif \(data)")
-//                    var abb = data.list
-//                    self.dataModels = data.list!
-//                    self.weekTable.reloadData()
-//
-////                    cell.configure(item: result)
-////                    let date = data.list?[0].dt
-////                    let convertDate = Date(timeIntervalSince1970: TimeInterval(date!))
-////                    let aa = convertDate.formatted(.dateTime.hour().minute())
-////                    print(aa)
-////                    cell.textLabel?.text = result.dtTxt ?? ""
-//
-//
-//                }
-//
-//            case .failure(let error):
-//                print("table fail \(error)")
-//            }
-//        }
-//    }
   
 }
 
@@ -189,14 +164,14 @@ extension ViewPage: UITableViewDataSource, UITableViewDelegate {
 
             cell.alpha = 0
         
-        self.network.fetchData(requestType: .city(city: cityNameLabel.text ?? "")) { result in
+        self.network.fetchData(requestType: .city(city: cityNameLabel.text ?? "")) { [weak self] result in
             switch result {
             case .success(let data):
                 DispatchQueue.main.async {
 //                    print("mif \(data)")
                     var abb = data.list
-                    self.dataModels = data.list!
-                    cell.configure(item: self.dataModels[indexPath.row])
+                    self?.dataModels = data.list!
+                    cell.configure(item: (self?.dataModels[indexPath.row])!)
                     
                     
                     UIView.animate(withDuration: 3) {

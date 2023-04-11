@@ -97,6 +97,8 @@ class WeatherCell: UICollectionViewCell {
         return label
     }()
     
+   
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupView()
@@ -109,6 +111,8 @@ class WeatherCell: UICollectionViewCell {
         mainView.backgroundColor = .white
     }
     
+    
+    
     // Лонгтап удаление перенести в ячейку
     // через точки не листается
     // таймер в одном месте 
@@ -116,43 +120,41 @@ class WeatherCell: UICollectionViewCell {
         guard let cityItemModel = cityItemModel else { return }
         
         self.cityNameLabel.text = cityItemModel.cityName
-        self.degreesLabel.text = cityItemModel.degrees
+        self.degreesLabel.text = String(cityItemModel.degrees) + "°"
         self.descriptionWeatherLabel.text = cityItemModel.description
         self.weatherImage.image = UIImage(named: cityItemModel.icon)
-//        self.timezone = TimeZone(secondsFromGMT: cityItemModel.timezone)
-        NotificationCenter.default.addObserver(forName: Notification.Name("timeChange"), object: nil, queue: .some(.current ?? .main)) { notification in
-            self.timeLabel.text = cityItemModel.timeLabels
-        }
+        self.timezone = TimeZone(secondsFromGMT: cityItemModel.timezone)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTime), name: Notification.Name("time"), object: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    @objc func updateTime() {
-//        let date = Date()
-//
-//        let dateFormatterHour = DateFormatter()
-//        dateFormatterHour.timeZone = self.timezone
-//        dateFormatterHour.dateFormat = "HH"
-//        let hourString = dateFormatterHour.string(from: date)
-//        let formattedHourString = String(format: "%02d", Int(hourString)!)
-//
-//        let dateFormatterMinute = DateFormatter()
-//        dateFormatterMinute.timeZone = self.timezone
-//        dateFormatterMinute.dateFormat = "mm"
-//        let minuteString = dateFormatterMinute.string(from: date)
-//        let formattedMinuteString = String(format: "%02d", Int(minuteString)!)
-//
-//        self.timeLabel.text = "\(formattedHourString): \(formattedMinuteString)"
-//
-//        if Int(hourString)! >= 18 || Int(hourString)! <= 5  {
-//            self.mainView.backgroundColor = .systemFill
-//        } else {
-//            self.mainView.backgroundColor = .white
-//        }
-//    }
+    @objc func updateTime() {
+        let date = Date()
+
+        let dateFormatterHour = DateFormatter()
+        dateFormatterHour.timeZone = self.timezone
+        dateFormatterHour.dateFormat = "HH"
+        let hourString = dateFormatterHour.string(from: date)
+        let formattedHourString = String(format: "%02d", Int(hourString)!)
+
+        let dateFormatterMinute = DateFormatter()
+        dateFormatterMinute.timeZone = self.timezone
+        dateFormatterMinute.dateFormat = "mm"
+        let minuteString = dateFormatterMinute.string(from: date)
+        let formattedMinuteString = String(format: "%02d", Int(minuteString)!)
+
+        self.timeLabel.text = "\(formattedHourString): \(formattedMinuteString)"
+
+        if Int(hourString)! >= 18 || Int(hourString)! <= 5  {
+            self.mainView.backgroundColor = .systemFill
+        } else {
+            self.mainView.backgroundColor = .white
+        }
+    }
 }
 
 // MARK: - setupView

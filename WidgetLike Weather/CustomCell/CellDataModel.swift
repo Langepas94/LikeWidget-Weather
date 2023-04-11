@@ -12,12 +12,12 @@ struct CellDataModel {
      
     
         let cityName: String?
-        let degrees: String?
+        let degrees: Int?
         let icon: String?
         let descriptionDegrees: String?
         let timeZone: Int?
     
-    init(cityName: String? = nil, degrees: String? = nil, icon: String? = nil, descriptionDegrees: String? = nil, timeZone: Int? = nil) {
+    init(cityName: String? = nil, degrees: Int? = nil, icon: String? = nil, descriptionDegrees: String? = nil, timeZone: Int? = nil) {
        self.cityName = cityName
        self.degrees = degrees
        self.icon = icon
@@ -27,7 +27,7 @@ struct CellDataModel {
     
         init?(currentData: WeatherDataModel) {
             self.cityName = currentData.city?.name ?? ""
-            self.degrees = String(currentData.list?[0].main?.temp ?? 0.0)
+            self.degrees = Int(currentData.list?[0].main?.temp ?? 0)
             self.descriptionDegrees = currentData.list?[0].weather?[0].description ?? ""
 
             self.icon = currentData.list?[0].weather?[0].icon

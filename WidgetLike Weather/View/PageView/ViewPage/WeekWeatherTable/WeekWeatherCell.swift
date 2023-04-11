@@ -62,7 +62,7 @@ class WeekWeatherCell: UITableViewCell {
         let formats = convertDate.formatted(.dateTime.hour().minute())
         self.timeLabel.text = String(formats)
         self.weatherImage.image = UIImage(named: item.weather?[0].icon ?? "")
-        self.degreeLabel.text = String(item.main?.temp ?? 0.0)
+        self.degreeLabel.text = String(item.main?.temp ?? 0.0) + "°"
         UIView.animate(withDuration: 0.6) {
             self.timeLabel.snp.remakeConstraints { (make) in
                 make.leading.equalToSuperview().offset(15)

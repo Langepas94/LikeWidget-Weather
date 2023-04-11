@@ -66,7 +66,10 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
         vc.popoverPresentationController?.sourceRect = self.tableView.rectForRow(at: indexPath)
         vc.popoverPresentationController?.sourceView = self.tableView
         
-        present(vc, animated: true)
+        
+            present(vc, animated: true)
+        
+        
     }
     
 }
