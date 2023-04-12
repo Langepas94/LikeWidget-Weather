@@ -20,17 +20,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         let tabBar = UITabBarController()
-        tabBar.tabBar.tintColor = .label
-        let navigationController = UINavigationController(rootViewController: MainScreenWithCollectinViewController())
-        navigationController.tabBarItem.image = UIImage(systemName: "cloud.circle")
-        navigationController.title = "Weather"
-        
-        let mapController = MapViewController()
-        mapController.tabBarItem.image = UIImage(systemName: "map.circle")
-        mapController.title = "Map weather"
-       
-        tabBar.setViewControllers([navigationController, mapController], animated: true)
-        window?.rootViewController = tabBar
+//        tabBar.tabBar.tintColor = .label
+//        let navigationController = UINavigationController(rootViewController: MainScreenWithCollectinViewController())
+//        navigationController.tabBarItem.image = UIImage(systemName: "cloud.circle")
+//        navigationController.title = "Weather"
+//
+//        let mapController = MapViewController()
+//        mapController.tabBarItem.image = UIImage(systemName: "map.circle")
+//        mapController.title = "Map weather"
+//
+//        tabBar.setViewControllers([navigationController, mapController], animated: true)
+        window?.rootViewController = MainScreenWithCollectinViewController()
         window?.makeKeyAndVisible()
     }
 

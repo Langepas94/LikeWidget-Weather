@@ -36,7 +36,7 @@ class DetailCityViewController: UIViewController {
     }()
     
     var currentPageNumber: Int = 0
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -95,22 +95,32 @@ extension DetailCityViewController {
         view.backgroundColor = .white
         view.addSubview(pageControl)
         view.addSubview(scrollView)
+//        scrollView.frame = view.frame
         scrollView.contentSize = CGSize(width: view.frame.width * CGFloat(mainView.count), height: view.frame.height - 200 )
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaInsets.top)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(UIScreen.main.bounds.height - 200)
-        }
+//        scrollView.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaInsets.top)
+//            make.leading.equalToSuperview()
+//            make.trailing.equalToSuperview()
+////            make.height.equalTo(UIScreen.main.bounds.height - 200)
+//            make.bottom.equalToSuperview()
+//        }
         
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
+
         pageControl.snp.makeConstraints { make in
-            make.centerX.equalTo(scrollView.snp.centerX)
-            make.top.equalTo(scrollView.snp.bottom).offset(30)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10)
         }
         
         var padding: CGFloat = 0
         for view in mainView {
             view.frame = CGRect(x: 0 + padding, y: 0, width: CGFloat(UIScreen.main.bounds.width), height: 0)
+            print("kaka \(view)")
             scrollView.addSubview(view)
             padding += UIScreen.main.bounds.width
         }

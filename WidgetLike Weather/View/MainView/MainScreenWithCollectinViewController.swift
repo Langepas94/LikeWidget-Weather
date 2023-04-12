@@ -232,13 +232,13 @@ extension MainScreenWithCollectinViewController: UICollectionViewDelegate {
         
         let vc = DetailCityViewController()
 
-        
+//
         vc.currentPageNumber = indexPath.row - 1
 
         vc.cityItemModel = cellModel
        
-//        vc.modalPresentationStyle =
-        
+        vc.modalPresentationStyle = .custom
+        vc.transitioningDelegate = self
         
 //        self.definesPresentationContext = true
 //        navigationController?.pushViewController(vc, animated: true)
@@ -353,4 +353,57 @@ extension MainScreenWithCollectinViewController {
     }
 }
 
+
+extension MainScreenWithCollectinViewController: UIViewControllerAnimatedTransitioning {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        0.4
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let fromView = transitionContext.viewController(forKey: .from)?.view, let toView = transitionContext.viewController(forKey: .to)?.view else { return }
+        
+        let isPresenting = (fromView == view)
+        
+        let presentedVc = isPresenting ? toView : fromView
+//        presentedVc.alpha = 0
+        if isPresenting {
+            transitionContext.containerView.addSubview(presentedVc)
+        }
+        presentedVc.layer.cornerRadius = 20
+        let size = CGSize(width: UIScreen.main.bounds.width - 100, height: UIScreen.main.bounds.height - 150)
+        
+//        let offScreenFrame = CGRect(origin: CGPoint(x: self.button.frame.origin.x, y: -UIScreen.main.bounds.height), size: size)
+//        let offScreenFrame = CGRect(x: self.button.frame.minX, y: self.button.frame.minY, width: self.button.frame.width, height: self.button.frame.height)
+        let offScreenFrame = CGRect(x: 50, y: 50, width: 0 , height: 0)
+        let onScreenFrame = CGRect(origin: .init(x: 50, y: 50), size: size)
+        
+        presentedVc.frame = isPresenting ? offScreenFrame : onScreenFrame
+        let animationDuration = transitionDuration(using: transitionContext)
+        
+        UIView.animate(withDuration: animationDuration) {
+            presentedVc.frame = isPresenting ? onScreenFrame : offScreenFrame
+//            presentedVc.alpha = 1
+            
+        } completion: { isSuccess in
+            
+            if !isPresenting {
+                presentedVc.removeFromSuperview()
+                
+            }
+            
+            transitionContext.completeTransition(isSuccess)
+        }
+
+    }
+    
+    
+}
+extension MainScreenWithCollectinViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return self
+    }
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return self
+    }
+}
 
