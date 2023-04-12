@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mapController = MapViewController()
         mapController.tabBarItem.image = UIImage(systemName: "map.circle")
         mapController.title = "Map weather"
-        
+       
         tabBar.setViewControllers([navigationController, mapController], animated: true)
         window?.rootViewController = tabBar
         window?.makeKeyAndVisible()

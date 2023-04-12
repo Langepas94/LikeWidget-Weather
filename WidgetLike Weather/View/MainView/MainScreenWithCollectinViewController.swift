@@ -33,9 +33,9 @@ class MainScreenWithCollectinViewController: UIViewController {
     var isCitiesLoaded = false
     
     var isFiltering = false
-    
+  
     var cancellables: Set<AnyCancellable> = []
-    
+    var point: CGPoint?
     private var network = NetworkManager()
     private var searchPublisher = PassthroughSubject<String, Never>()
     
@@ -148,6 +148,9 @@ class MainScreenWithCollectinViewController: UIViewController {
         }
     }
     
+
+    
+    
 }
 // MARK: - setupUI func
 extension MainScreenWithCollectinViewController {
@@ -228,12 +231,18 @@ extension MainScreenWithCollectinViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let vc = DetailCityViewController()
+
         
         vc.currentPageNumber = indexPath.row - 1
-        
+
         vc.cityItemModel = cellModel
+       
+//        vc.modalPresentationStyle =
         
-        present(vc, animated: true)
+        
+//        self.definesPresentationContext = true
+//        navigationController?.pushViewController(vc, animated: true)
+        self.present(vc, animated: true)
     }
 }
 
@@ -343,3 +352,5 @@ extension MainScreenWithCollectinViewController {
         self.mainCollection.refreshControl?.endRefreshing()
     }
 }
+
+

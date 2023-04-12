@@ -30,6 +30,7 @@
 		4452F7C629CB424800A44149 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4452F7C529CB424800A44149 /* MapViewController.swift */; };
 		445F592F29E42BEA00B3517C /* FutureTimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445F592E29E42BEA00B3517C /* FutureTimeTableView.swift */; };
 		445F593129E4567600B3517C /* FutureTimeWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445F593029E4567600B3517C /* FutureTimeWeatherCell.swift */; };
+		445F595D29E6F52400B3517C /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445F595C29E6F52400B3517C /* TestVC.swift */; };
 		44772AA129DC5F7300A77053 /* CellDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44772AA029DC5F7300A77053 /* CellDataModel.swift */; };
 		44772AA429DC61D000A77053 /* DataIterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44772AA329DC61D000A77053 /* DataIterator.swift */; };
 		44772AA829DC67F200A77053 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44772AA729DC67F200A77053 /* CellViewModel.swift */; };
@@ -66,6 +67,7 @@
 		4452F7C529CB424800A44149 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		445F592E29E42BEA00B3517C /* FutureTimeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureTimeTableView.swift; sourceTree = "<group>"; };
 		445F593029E4567600B3517C /* FutureTimeWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureTimeWeatherCell.swift; sourceTree = "<group>"; };
+		445F595C29E6F52400B3517C /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		44772AA029DC5F7300A77053 /* CellDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDataModel.swift; sourceTree = "<group>"; };
 		44772AA329DC61D000A77053 /* DataIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataIterator.swift; sourceTree = "<group>"; };
 		44772AA729DC67F200A77053 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				443E423329ADF55A0046091B /* MainScreenWithCollectinViewController.swift */,
+				445F595C29E6F52400B3517C /* TestVC.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				44772AA829DC67F200A77053 /* CellViewModel.swift in Sources */,
 				44F328B029C335E80011C296 /* FilterDegreesService.swift in Sources */,
 				4452F7BE29C8B2FE00A44149 /* BarButtonItem + extension.swift in Sources */,
+				445F595D29E6F52400B3517C /* TestVC.swift in Sources */,
 				445F592F29E42BEA00B3517C /* FutureTimeTableView.swift in Sources */,
 				44B5AEA429B5DDBB00087692 /* ResultTableCitiesViewController.swift in Sources */,
 				44BDC5BE29E02BA00013057D /* DetailCitySomeView.swift in Sources */,
