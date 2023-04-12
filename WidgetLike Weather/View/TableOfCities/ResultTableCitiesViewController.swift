@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-class ResultVc: UIViewController {
+class ResultTableCitiesViewController: UIViewController {
     // MARK: - elements
     let tableView: UITableView = {
        let table = UITableView()
@@ -27,14 +27,14 @@ class ResultVc: UIViewController {
         super.viewDidLoad()
       
         setupUi()
+        
         tableView.dataSource = self
         tableView.delegate = self
-        
     }
 }
 
 // MARK: extension Datasource
-extension ResultVc: UITableViewDataSource, UITableViewDelegate {
+extension ResultTableCitiesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		filteredNames.count
     }
@@ -56,7 +56,7 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let vc = AddCityScreen()
+        let vc = AddCityViewController()
         
 		vc.callCity = self.callCity
         vc.titleCity = filteredNames[indexPath.row]
@@ -65,8 +65,6 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
         vc.preferredContentSize = CGSize(width: 330, height: 120)
         vc.popoverPresentationController?.sourceRect = self.tableView.rectForRow(at: indexPath)
         vc.popoverPresentationController?.sourceView = self.tableView
-        
-        
             present(vc, animated: true)
         
         
@@ -74,18 +72,17 @@ extension ResultVc: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-extension ResultVc: UIPopoverPresentationControllerDelegate {
+extension ResultTableCitiesViewController: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
     }
 }
 
 // MARK: SetupUi
-extension ResultVc {
+extension ResultTableCitiesViewController {
     func setupUi() {
         view.backgroundColor = .backColor?.withAlphaComponent(0.96)
         view.addSubview(tableView)
-        
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

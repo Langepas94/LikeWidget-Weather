@@ -22,8 +22,6 @@ class MapViewController: UIViewController {
     
     var favoriteList: [String] = []
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,8 +39,8 @@ class MapViewController: UIViewController {
     }
     
     func annotationsCreator() {
-        self.favoriteList = Database.shared.allFavorites()
-        Database.shared.allFavorites().forEach { city in
+        self.favoriteList = DatabaseService.shared.allFavorites()
+        DatabaseService.shared.allFavorites().forEach { city in
             self.network.fetchData(requestType: .city(city: city)) { result in
                 switch result {
                 case .success(let data ):
@@ -54,16 +52,12 @@ class MapViewController: UIViewController {
                         point.coordinate = CLLocationCoordinate2D(latitude: annotationsLat ?? 0.0, longitude: annotationsLon ?? 0.0)
                         self.pointAnnotationsArray.append(point)
                         self.map.addAnnotation(point)
-                       
                     }
-                    
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
         }
-        
-        
     }
 }
 

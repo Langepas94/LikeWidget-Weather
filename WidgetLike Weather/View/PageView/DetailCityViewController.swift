@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PageViewController: UIViewController {
+class DetailCityViewController: UIViewController {
 
     private let pageControl: UIPageControl = {
         let page = UIPageControl()
@@ -16,10 +16,9 @@ class PageViewController: UIViewController {
         page.currentPageIndicatorTintColor = .black
         page.hidesForSinglePage = true
         return page
-        
     }()
     
-    var mainView: [ViewPage] = []
+    var mainView: [DetailCitySomeView] = []
     
     var cityItemModel: [CellCityViewModel]? {
         didSet {
@@ -40,8 +39,11 @@ class PageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         pageControl.addTarget(self, action: #selector(segmentScroll), for: .valueChanged)
-        addPages(count: Database.shared.favoriteCount())
+        
+        addPages(count: DatabaseService.shared.favoriteCount())
+        
         setupUI()
 
         scrollView.delegate = self
@@ -65,7 +67,7 @@ class PageViewController: UIViewController {
     }
     func addPages(count: Int) {
         for _ in 1...count {
-            mainView.append(ViewPage())
+            mainView.append(DetailCitySomeView())
         }
     }
     
@@ -78,11 +80,16 @@ class PageViewController: UIViewController {
 
     }
     
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        for view in mainView {
+            view.frame.size.height = scrollView.bounds.height
+        }
+    }
 
 }
 
-extension PageViewController {
+extension DetailCityViewController {
     func setupUI() {
         
         view.backgroundColor = .white
@@ -103,16 +110,15 @@ extension PageViewController {
         
         var padding: CGFloat = 0
         for view in mainView {
-            view.frame = CGRect(x: 0 + padding, y: 0, width: CGFloat(UIScreen.main.bounds.width), height: scrollView.bounds.height)
+            view.frame = CGRect(x: 0 + padding, y: 0, width: CGFloat(UIScreen.main.bounds.width), height: 0)
             scrollView.addSubview(view)
             padding += UIScreen.main.bounds.width
         }
         
-       
     }
 }
 
-extension PageViewController: UIScrollViewDelegate {
+extension DetailCityViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pageControl.currentPage = Int(scrollView.contentOffset.x / UIScreen.main.bounds.width)
     }

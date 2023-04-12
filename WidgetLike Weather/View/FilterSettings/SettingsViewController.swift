@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-class FilterSettingsViewController: UIViewController {
+class SettingsViewController: UIViewController {
     
     //MARK: - elements
     private lazy var mainVerticalStackView: UIStackView = {
@@ -27,7 +27,7 @@ class FilterSettingsViewController: UIViewController {
         return stack
     }()
     
-    private let topView = TopFilteredView()
+    private let topView = FilterNavigationTopView()
     
     private lazy var minusButton: UIButton = {
         let butt = UIButton()
@@ -105,7 +105,7 @@ class FilterSettingsViewController: UIViewController {
 }
 
 // MARK: - setupUI
-extension FilterSettingsViewController {
+extension SettingsViewController {
     func setupUI() {
         view.backgroundColor = .white
         view.addSubview(degreesFilteringStackView)
@@ -142,7 +142,6 @@ extension FilterSettingsViewController {
         }
         topView.closeButton.addTarget(self, action: #selector(easyDismiss), for: .touchUpInside)
         topView.clearFilterButton.addTarget(self, action: #selector(clearFilters), for: .touchUpInside)
-        
     }
     
     func disablingButton() {
@@ -163,10 +162,8 @@ extension FilterSettingsViewController {
         } else {
             completion?(true, Int(result) ?? 0)
         }
-        
         enablingButton()
         self.dismiss(animated: true)
-        
     }
     
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
@@ -229,20 +226,13 @@ extension FilterSettingsViewController {
 
 // MARK: - textField delegate
 
-extension FilterSettingsViewController: UITextFieldDelegate {
+extension SettingsViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         
         guard CharacterSet(charactersIn: "0123456789").isSuperset(of: CharacterSet(charactersIn: string)) else {
             return false
         }
-       
-      
-        
-//        var text = textField.text ?? ""
-//        var result = Int(text + string) ?? 02
-//        result = min(100, max(-100, result))
-//        textField.text = String(result)
         return true
     }
     
@@ -251,8 +241,6 @@ extension FilterSettingsViewController: UITextFieldDelegate {
         
         if degreesTextField.text == "" {
             degreesTextField.text = "0"
-            
-            
         }
         return true
     }

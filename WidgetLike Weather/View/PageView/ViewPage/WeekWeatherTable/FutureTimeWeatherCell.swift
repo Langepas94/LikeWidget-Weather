@@ -8,14 +8,13 @@
 import Foundation
 import UIKit
 
-class WeekWeatherCell: UITableViewCell {
+class FutureTimeWeatherCell: UITableViewCell {
     
     static let id = "WeekWeatherCellID"
     
     let timeLabel: UILabel = {
         let label = UILabel()
         label.text = "Loading"
-        
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 20)
@@ -25,7 +24,6 @@ class WeekWeatherCell: UITableViewCell {
     let weatherImage: UIImageView = {
         let image = UIImageView()
         let config = UIImage.SymbolConfiguration(pointSize: 25)
-//        image.image = UIImage(systemName: "clock", withConfiguration: config)?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
         image.contentMode = .center
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
@@ -33,27 +31,21 @@ class WeekWeatherCell: UITableViewCell {
     
     let degreeLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Loading"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 20)
         return label
     }()
     
-//    required init?(coder: NSCoder) {
-//        super.init(coder: coder)
-//        setupUIs()
-//    }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-       
-            setupUIs()
-        
-        
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUIs()
     }
     
-  
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     func configure(item: List) {
         
@@ -67,7 +59,6 @@ class WeekWeatherCell: UITableViewCell {
             self.timeLabel.snp.remakeConstraints { (make) in
                 make.leading.equalToSuperview().offset(15)
                 make.centerY.equalToSuperview()
-                
             }
             self.degreeLabel.snp.remakeConstraints { (make) in
                 make.trailing.equalToSuperview().offset(-15)
@@ -76,15 +67,13 @@ class WeekWeatherCell: UITableViewCell {
             
             self.weatherImage.snp.makeConstraints { make in
                 make.center.equalToSuperview()
-                
             }
-
             self.contentView.layoutIfNeeded()
         }
     }
 }
 
-extension WeekWeatherCell {
+extension FutureTimeWeatherCell {
     func setupUIs() {
         contentView.addSubview(timeLabel)
         contentView.addSubview(weatherImage)
@@ -107,8 +96,6 @@ extension WeekWeatherCell {
             make.trailing.equalToSuperview().offset(-55)
             make.height.equalTo(50)
             make.centerY.equalToSuperview()
-//            make.width.equalTo(30)
         }
-        
     }
 }

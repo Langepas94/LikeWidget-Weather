@@ -19,7 +19,7 @@ enum CityJSONError: Error {
     }
 }
 
-class CitiesService {
+class CitiesJsonTestService {
     
     var cities: [City] = []
     public var favorites: [String] = []
@@ -34,7 +34,7 @@ class CitiesService {
             .appendingPathExtension("json")
     }
     
-    static let shared = CitiesService()
+    static let shared = CitiesJsonTestService()
     private init() {
         loadFavorites()
             .sink { _ in

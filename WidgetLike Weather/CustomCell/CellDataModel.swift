@@ -24,7 +24,6 @@ struct CellDataModel {
        self.descriptionDegrees = descriptionDegrees
        self.timeZone = timeZone
    }
-    
         init?(currentData: WeatherDataModel) {
             self.cityName = currentData.city?.name ?? ""
             self.degrees = Int(currentData.list?[0].main?.temp ?? 0)
@@ -33,7 +32,5 @@ struct CellDataModel {
             self.icon = currentData.list?[0].weather?[0].icon
             self.timeZone = currentData.city?.timezone
         }
-       
- 
     }
 

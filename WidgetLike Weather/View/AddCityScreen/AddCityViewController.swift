@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Combine
 
-class AddCityScreen: UIViewController {
+class AddCityViewController: UIViewController {
     
     let mainCityLabel: UILabel = {
         let label = UILabel()
@@ -83,17 +83,8 @@ class AddCityScreen: UIViewController {
     
     @objc func buttonAction() {
 		let name = titleCity!
-        Database.shared.addToFavorite(city: dataArray!)
-        Database.shared.favoriteWorker.send(name)
-//		CitiesService.shared.saveFavorite(name)
-//			.sink { _ in
-//
-//			} receiveValue: { _ in
-//
-////				CitiesService.shared.favoritesAppender.send(name)
-//			}
-//			.store(in: &cancellables)
-        
+        DatabaseService.shared.addToFavorite(city: dataArray!)
+        DatabaseService.shared.favoriteWorker.send(name)
         NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
 
         self.dismiss(animated: true)
@@ -102,9 +93,7 @@ class AddCityScreen: UIViewController {
     func getData() {
         self.network.fetchData(requestType: .city(city: titleCity ?? "")) { result in
             switch result {
-                
             case .success(let data):
-                
                 DispatchQueue.main.async {
                     self.degreesLabel.text = String(data.list![0].main?.temp ?? 0.0)
                     self.weatherImage.image = UIImage(named: data.list?[0].weather?[0].icon ?? "")
@@ -121,7 +110,7 @@ class AddCityScreen: UIViewController {
     }
 }
 
-extension AddCityScreen {
+extension AddCityViewController {
     func setupUI() {
         view.addSubview(mainCityLabel)
         view.addSubview(actionButton)
@@ -130,9 +119,6 @@ extension AddCityScreen {
         view.addSubview(descriptionWeatherLabel)
         view.addSubview(descriptionDegreesLabel)
         view.backgroundColor = .white
-        
-        
-        
         
         actionButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()

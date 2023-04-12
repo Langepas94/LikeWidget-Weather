@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class WeekWeatherTable: UIView {
+class FutureTimeTableView: UIView {
     
     private var table: UITableView = {
         let table = UITableView()
@@ -25,13 +25,8 @@ class WeekWeatherTable: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        setupUI()
-//    }
 }
-extension WeekWeatherTable {
+extension FutureTimeTableView {
     func setupUI() {
         addSubview(table)
        
@@ -41,11 +36,10 @@ extension WeekWeatherTable {
             make.edges.equalToSuperview()
             make.height.equalTo(200)
         }
-        
     }
 }
 
-extension WeekWeatherTable: UITableViewDataSource {
+extension FutureTimeTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         17
     }
@@ -56,6 +50,4 @@ extension WeekWeatherTable: UITableViewDataSource {
         cell.tintColor = .black
         return cell
     }
-    
-    
 }

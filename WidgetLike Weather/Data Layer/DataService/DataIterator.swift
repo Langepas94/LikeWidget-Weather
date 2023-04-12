@@ -11,29 +11,29 @@ import UIKit
 // get networkFetch
 
 
-class DataService {
+class DataIterator {
     
     var timer: Timer?
     
-    static var shared = DataService()
+    static var shared = DataIterator()
     let network = NetworkManager()
 
     func updatingData(closure: @escaping([CellCityViewModel])-> Void) {
-        let result = Database.shared.updateFavoritesModels { result in
+        let result = DatabaseService.shared.updateFavoritesModels { result in
             closure(result)
         }
     }
     
     func preload(closure: @escaping([CellCityViewModel])-> Void)  {
         
-        let result = Database.shared.allFavoritesModels()
+        let result = DatabaseService.shared.allFavoritesModels()
         closure(result)
         
     }
     
     func filtering(degree: String, closure: @escaping([CellCityViewModel])-> Void)  {
         
-        let result = Database.shared.filteringFavorites(degree: degree)
+        let result = DatabaseService.shared.filteringFavorites(degree: degree)
         closure(result)
         
     }

@@ -11,11 +11,11 @@ import CoreLocation
 import SQLite
 import Combine
 
-class MainScreenViewController: UIViewController {
+class MainScreenWithCollectinViewController: UIViewController {
     
     // MARK: - elements of view
     private lazy var searchController: UISearchController = {
-        let vc = ResultVc()
+        let vc = ResultTableCitiesViewController()
         return UISearchController(searchResultsController: vc)
     }()
     
@@ -24,17 +24,17 @@ class MainScreenViewController: UIViewController {
         collection.dataSource = self
         collection.delegate = self
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(WeatherCell.self, forCellWithReuseIdentifier: WeatherCell.cellId)
-        collection.register(GeoWeatherCell.self, forCellWithReuseIdentifier: GeoWeatherCell.cellId)
+        collection.register(WeatherCellOnMainView.self, forCellWithReuseIdentifier: WeatherCellOnMainView.cellId)
+        collection.register(GeoWeatherCellOnMainView.self, forCellWithReuseIdentifier: GeoWeatherCellOnMainView.cellId)
         collection.showsVerticalScrollIndicator = false
         return collection
     }()
     
     var isCitiesLoaded = false
+    
     var isFiltering = false
+    
     var cancellables: Set<AnyCancellable> = []
-    //    var favoriteCities: [FavoriteCity] = []
-    //    var filteredCities: [FavoriteCity] = []
     
     private var network = NetworkManager()
     private var searchPublisher = PassthroughSubject<String, Never>()
@@ -49,9 +49,9 @@ class MainScreenViewController: UIViewController {
     var lat: CLLocationDegrees?
     var lon: CLLocationDegrees?
     
-    private var addCityVC: AddCityScreen!
+    private var addCityVC: AddCityViewController!
     
-    let dataService = DataService()
+    let dataService = DataIterator()
     
     private var cellModel: [CellCityViewModel] = []
     
@@ -74,15 +74,8 @@ class MainScreenViewController: UIViewController {
         case .authorized:
             break
         }
-        
-        let path = NSSearchPathForDirectoriesInDomains(
-            .documentDirectory, .userDomainMask, true
-        ).first!
-        //        print(path)
         setupNavigationItem()
         locationManaging.delegate = self
-        
-        
         
         //        locationManaging.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
@@ -104,14 +97,14 @@ class MainScreenViewController: UIViewController {
             .compactMap({ $0 })
             .sink(receiveValue: {[weak self] (searchString: String) in
                 guard let self = self else { return }
-                let cities = Database.shared.getCityFromDBtoStringArray(chars: searchString)
-                let vc = self.searchController.searchResultsController as? ResultVc
+                let cities = DatabaseService.shared.getCityFromDBtoStringArray(chars: searchString)
+                let vc = self.searchController.searchResultsController as? ResultTableCitiesViewController
                 vc?.filteredNames = cities
                 vc?.tableView.reloadData()
                 
             })
             .store(in: &cancellables)
-        Database.shared.favoriteWorker
+        DatabaseService.shared.favoriteWorker
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: {_ in
                 self.configureViewModels()
@@ -146,7 +139,7 @@ class MainScreenViewController: UIViewController {
     
     func configureViewModels() {
         
-        DataService.shared.preload {  closure in
+        DataIterator.shared.preload {  closure in
             DispatchQueue.main.async {
                 self.cellModel = closure
                 print("memm \(closure)")
@@ -157,17 +150,22 @@ class MainScreenViewController: UIViewController {
     
 }
 // MARK: - setupUI func
-extension MainScreenViewController {
+extension MainScreenWithCollectinViewController {
     func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         
         title = "Favorites"
         
         searchController.searchBar.placeholder = "Search for your new favorite city"
+        
         searchController.searchResultsUpdater = self
+        
         navigationItem.searchController = searchController
+        
         mainCollection.backgroundColor = .systemBackground
+        
         view.addSubview(mainCollection)
+        
         mainCollection.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -175,7 +173,7 @@ extension MainScreenViewController {
 }
 
 // MARK: - UICollectionViewDataSource()
-extension MainScreenViewController: UICollectionViewDataSource {
+extension MainScreenWithCollectinViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -189,7 +187,8 @@ extension MainScreenViewController: UICollectionViewDataSource {
         // MARK: - geoCell
         
         if indexPath.row == 0 {
-            let geoCell = mainCollection.dequeueReusableCell(withReuseIdentifier: GeoWeatherCell.cellId, for: indexPath) as! GeoWeatherCell
+            let geoCell = mainCollection.dequeueReusableCell(withReuseIdentifier: GeoWeatherCellOnMainView.cellId, for: indexPath) as! GeoWeatherCellOnMainView
+            
             
             if let location = locationManaging.location {
                 self.lat = location.coordinate.latitude
@@ -204,7 +203,7 @@ extension MainScreenViewController: UICollectionViewDataSource {
                 case .success(let data):
                     DispatchQueue.main.async {
                         
-                        guard let currentData = WeatherCellModel(currentData: data) else { return }
+                        guard let currentData = CustomWeatherCellModel(currentData: data) else { return }
                         geoCell.configure(data: currentData)
                     }
                 case .failure(let error):
@@ -218,27 +217,29 @@ extension MainScreenViewController: UICollectionViewDataSource {
             return geoCell
         }
         
-        let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCell.cellId, for: indexPath) as! WeatherCell
+        let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCellOnMainView.cellId, for: indexPath) as! WeatherCellOnMainView
         
         cell.cityItemModel = cellModel[indexPath.row - 1]
         return cell
     }
 }
 // MARK: - UICollectionViewDataDelegate()
-extension MainScreenViewController: UICollectionViewDelegate {
+extension MainScreenWithCollectinViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let vc = PageViewController()
-        vc.currentPageNumber = indexPath.row - 1
-        vc.cityItemModel = cellModel
-        present(vc, animated: true)
+        let vc = DetailCityViewController()
         
+        vc.currentPageNumber = indexPath.row - 1
+        
+        vc.cityItemModel = cellModel
+        
+        present(vc, animated: true)
     }
 }
 
 
 // MARK: Search Updating
-extension MainScreenViewController: UISearchResultsUpdating {
+extension MainScreenWithCollectinViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         
@@ -249,8 +250,7 @@ extension MainScreenViewController: UISearchResultsUpdating {
 }
 // MARK: - location Setup
 
-extension MainScreenViewController: CLLocationManagerDelegate {
-    
+extension MainScreenWithCollectinViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -263,83 +263,55 @@ extension MainScreenViewController: CLLocationManagerDelegate {
     }
 }
 
-//struct DataCacheService {
-//
-//    var connection: Connection?
-//    static private(set) var shared = DataCacheService()
-//    
-//    private init() {
-//        do {
-//            guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-//            userDirectory.appendPathComponent("DataCache")
-//            userDirectory.appendPathExtension("sqlite3")
-//            connection = try SQLite.Connection(userDirectory.path)
-////            connection.run
-//        } catch {
-//            print(error.localizedDescription)
-//        }
-//    }
-//
-//    public func clear() {
-//        guard var userDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-//        userDirectory.appendPathComponent("DataCache")
-//        userDirectory.appendPathExtension("sqlite3")
-//        try? FileManager.default.removeItem(at: userDirectory)
-//        DataCacheService.shared = DataCacheService()
-//    }
-//}
 // MARK: - Right bar item (settings)
-extension MainScreenViewController {
+extension MainScreenWithCollectinViewController {
     func setupNavigationItem() {
         self.setNavigationItem(bool: false)
     }
     
     @objc func rightBarSettingsAction() {
-        let vc = FilterSettingsViewController()
+        let vc = SettingsViewController()
         vc.completion = {[weak self] bool, int in
             guard let self = self else { return }
-            DataService.shared.filtering(degree: String(int)) {  closure in
+            DataIterator.shared.filtering(degree: String(int)) {  closure in
                 DispatchQueue.main.async {
                     self.cellModel = closure
                     print("memm \(closure)")
                     self.mainCollection.reloadData()
                 }
             }
-                        self.isFiltering = bool
+            self.isFiltering = bool
             
-                        self.setNavigationItem(bool: bool)
+            self.setNavigationItem(bool: bool)
             
-                        self.mainCollection.reloadData()
-               
-                    }
-        self.present(vc, animated: true)
+            self.mainCollection.reloadData()
+            
         }
-        
+        self.present(vc, animated: true)
     }
+    
+}
+// пробросить из ячейки лонгтап и обработать в контроллере
+// привести в порядок
 
 // MARK: - actions
-extension MainScreenViewController {
+extension MainScreenWithCollectinViewController {
     @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
         guard sender.state == .began else { return }
         let point = sender.location(in: self.mainCollection)
         let indexPath = self.mainCollection.indexPathForItem(at: point)
         let item = indexPath!.item
         let section = indexPath!.section
-        let names = Database.shared.allFavorites()
+        let names = DatabaseService.shared.allFavorites()
         let indexNames = names[indexPath!.item - 1]
         
         let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
         
         let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
-            //                                  CitiesService.shared.deleteFavorite(indexPath)
-            //
-            print("kuka \(indexNames)")
-            Database.shared.removeFromFavorite(city: indexNames)
             
-            //            self.mainCollection.performBatchUpdates {
-            //                self.mainCollection.deleteItems(at: [IndexPath(item: item, section: section)] )
-            //
-            //            }
+            print("kuka \(indexNames)")
+            DatabaseService.shared.removeFromFavorite(city: indexNames)
+            
             self.configureViewModels()
             NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
         }
@@ -352,7 +324,7 @@ extension MainScreenViewController {
 }
 
 // MARK: - Refresh Controller
-extension MainScreenViewController {
+extension MainScreenWithCollectinViewController {
     func setupRefresh() {
         self.mainCollection.refreshControl = UIRefreshControl()
         self.mainCollection.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
@@ -361,7 +333,7 @@ extension MainScreenViewController {
     @objc func refreshData() {
         
         DispatchQueue.main.async {
-            DataService.shared.updatingData { closure in
+            DataIterator.shared.updatingData { closure in
                 DispatchQueue.main.async {
                     print("memm \(closure)")
                 }
