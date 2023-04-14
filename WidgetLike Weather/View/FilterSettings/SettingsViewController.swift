@@ -173,7 +173,6 @@ extension SettingsViewController {
         }
     }
     
-    
     @objc func plusButtonHolded(_ sender: UIButton) {
         plusButtonSingleTap()
         timerForHoldingButton = Timer.scheduledTimer(timeInterval: 0.12, target: self, selector: #selector(plusButtonHoldAction), userInfo: nil, repeats: true)
@@ -192,7 +191,6 @@ extension SettingsViewController {
     @objc func plusButtonHoldAction() {
         plusButtonSingleTap()
     }
-    
     
     @objc func minusButtonHolded(_ sender: UIButton) {
         minusButtonSingleTap()

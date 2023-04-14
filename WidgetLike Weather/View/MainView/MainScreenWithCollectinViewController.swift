@@ -86,9 +86,9 @@ class MainScreenWithCollectinViewController: UIViewController {
         }
         
         setupUI()
-        let longPress = UILongPressGestureRecognizer()
-        longPress.addTarget(self, action: #selector(longDeleteItem))
-        self.mainCollection.addGestureRecognizer(longPress)
+//        let longPress = UILongPressGestureRecognizer()
+//        longPress.addTarget(self, action: #selector(longDeleteItem))
+////        self.mainCollection.addGestureRecognizer(longPress)
         
         
         searchPublisher
@@ -142,7 +142,7 @@ class MainScreenWithCollectinViewController: UIViewController {
         DataIterator.shared.preload {  closure in
             DispatchQueue.main.async {
                 self.cellModel = closure
-                print("memm \(closure)")
+                
                 self.mainCollection.reloadData()
             }
         }
@@ -232,16 +232,10 @@ extension MainScreenWithCollectinViewController: UICollectionViewDelegate {
         
         let vc = DetailCityViewController()
 
-        
         vc.currentPageNumber = indexPath.row - 1
 
         vc.cityItemModel = cellModel
        
-//        vc.modalPresentationStyle =
-        
-        
-//        self.definesPresentationContext = true
-//        navigationController?.pushViewController(vc, animated: true)
         self.present(vc, animated: true)
     }
 }
@@ -285,7 +279,7 @@ extension MainScreenWithCollectinViewController {
             DataIterator.shared.filtering(degree: String(int)) {  closure in
                 DispatchQueue.main.async {
                     self.cellModel = closure
-                    print("memm \(closure)")
+                    
                     self.mainCollection.reloadData()
                 }
             }
@@ -344,7 +338,7 @@ extension MainScreenWithCollectinViewController {
         DispatchQueue.main.async {
             DataIterator.shared.updatingData { closure in
                 DispatchQueue.main.async {
-                    print("memm \(closure)")
+                    
                 }
             }
             self.configureViewModels()

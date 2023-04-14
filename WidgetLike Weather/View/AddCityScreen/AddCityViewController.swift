@@ -35,15 +35,12 @@ class AddCityViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.text = ""
-//        label.textAlignment = .center
         label.font = .systemFont(ofSize: 37)
         return label
     }()
     
     private let weatherImage: UIImageView = {
         let image = UIImageView()
-//        image.image = UIImage(named: "01n")
-//        image.contentMode = .center
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -86,7 +83,6 @@ class AddCityViewController: UIViewController {
         DatabaseService.shared.addToFavorite(city: dataArray!)
         DatabaseService.shared.favoriteWorker.send(name)
         NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
-
         self.dismiss(animated: true)
     }
     
@@ -98,8 +94,6 @@ class AddCityViewController: UIViewController {
                     self.degreesLabel.text = String(data.list![0].main?.temp ?? 0.0)
                     self.weatherImage.image = UIImage(named: data.list?[0].weather?[0].icon ?? "")
                     self.descriptionWeatherLabel.text = data.list?[0].weather?[0].description ?? ""
-                    
-//                    self.dataArray = CellDataModel(currentData: data)
                     self.dataArray = CellDataModel(currentData: data)
                 }
                 
@@ -124,7 +118,6 @@ extension AddCityViewController {
             make.centerY.equalToSuperview()
             make.width.equalTo(100)
             make.trailing.equalToSuperview().offset(-6)
-            
         }
         mainCityLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
@@ -139,7 +132,6 @@ extension AddCityViewController {
             make.centerY.equalToSuperview()
             make.leading.equalTo(weatherImage.snp.trailing).offset(12)
         }
-        
         
         descriptionWeatherLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-16)

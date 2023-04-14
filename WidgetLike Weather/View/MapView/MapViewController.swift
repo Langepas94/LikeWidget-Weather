@@ -76,8 +76,6 @@ extension MapViewController {
         }
     }
 }
-extension MapViewController: MKMapViewDelegate {
-    
-}
+extension MapViewController: MKMapViewDelegate {}
 
 

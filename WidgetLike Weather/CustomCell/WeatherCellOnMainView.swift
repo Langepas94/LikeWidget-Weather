@@ -5,8 +5,6 @@
 //  Created by Artem on 28.02.2023.
 //
 
-/// сделать вью добавить все в нее и у этого вью делать настройки
-
 import Foundation
 import UIKit
 import SnapKit
@@ -34,22 +32,20 @@ class WeatherCellOnMainView: UICollectionViewCell {
         view.layer.shadowOpacity = 0.08
         view.layer.masksToBounds = false
         view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let cityNameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 21)
-        
+        label.textAlignment = .left
         return label
     }()
     
     private let degreesLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+        //        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 43)
         return label
@@ -59,13 +55,11 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let image = UIImageView()
         image.image = UIImage(named: "01n")
         image.contentMode = .center
-        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
     private let descriptionWeatherLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
         return label
@@ -73,7 +67,6 @@ class WeatherCellOnMainView: UICollectionViewCell {
     
     private let descriptionDegreesLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
         return label
@@ -84,31 +77,59 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let config = UIImage.SymbolConfiguration(pointSize: 15)
         image.image = UIImage(systemName: "clock", withConfiguration: config)?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
         image.contentMode = .center
-        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
     private let timeLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.numberOfLines = 2
         label.font = UIFont(name: "AppleSDGothicNeo-Light", size: 15)
         return label
     }()
     
+    let longPress = UILongPressGestureRecognizer()
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        setupView()
+        
+        //        setupView()
+        contentView.addSubview(mainView)
+        mainView.addSubview(cityNameLabel)
+        mainView.addSubview(degreesLabel)
+        mainView.addSubview(weatherImage)
+        mainView.addSubview(descriptionWeatherLabel)
+        mainView.addSubview(timeLabel)
+        mainView.addSubview(clockImage)
+        mainView.layer.cornerRadius = 20
+        
+        contentView.addGestureRecognizer(longPress)
+        longPress.addTarget(self, action: #selector(longTap))
+        longPress.isEnabled = false
     }
     
-    override func prepareForReuse() {
-        cityNameLabel.text = ""
-        degreesLabel.text = ""
-        mainView.backgroundColor = .white
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        mainView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0))
+        
+        cityNameLabel.frame = CGRect(x: 10, y: 15, width: mainView.frame.width, height: 22)
+        
+        degreesLabel.frame = CGRect(x: 10, y: cityNameLabel.frame.height + 20, width: mainView.frame.width, height: 50)
+        
+        weatherImage.frame = CGRect(x: 10, y: degreesLabel.frame.maxY + 15, width: 30, height: 30)
+        
+        let frameDescriptionLabelSize = CGSize(width: mainView.frame.width / 1.5, height: 20)
+        
+        descriptionWeatherLabel.frame = CGRect(x: mainView.frame.maxX - frameDescriptionLabelSize.width, y: weatherImage.frame.origin.y, width: frameDescriptionLabelSize.width, height: frameDescriptionLabelSize.height)
+        
+        let frameTimelabelSize = CGSize(width: mainView.frame.width / 3, height: 30)
+        clockImage.frame = CGRect(x: 10, y: mainView.frame.maxY - frameTimelabelSize.height, width: 20, height: mainView.frame.height / 7)
+        
+        timeLabel.frame = CGRect(x: clockImage.frame.maxX + 5, y: clockImage.frame.origin.y, width: mainView.frame.width / 3, height: mainView.frame.height / 7)
     }
-
+    
     func setupCells() {
+        
         guard let cityItemModel = cityItemModel else { return }
         
         self.cityNameLabel.text = cityItemModel.cityName
@@ -118,10 +139,15 @@ class WeatherCellOnMainView: UICollectionViewCell {
         self.timezone = TimeZone(secondsFromGMT: cityItemModel.timezone)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateTime), name: Notification.Name("time"), object: nil)
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func longTap(_ sender: UILongPressGestureRecognizer) {
+        print("mem")
     }
     
     @objc func updateTime() {
@@ -149,62 +175,3 @@ class WeatherCellOnMainView: UICollectionViewCell {
     }
 }
 
-// MARK: - setupView
-extension WeatherCellOnMainView {
-    func setupView() {
-        mainView.backgroundColor = .white
-        mainView.layer.cornerRadius = 20
-        
-        contentView.addSubview(mainView)
-        mainView.addSubview(cityNameLabel)
-        mainView.addSubview(degreesLabel)
-        mainView.addSubview(weatherImage)
-        mainView.addSubview(descriptionWeatherLabel)
-        mainView.addSubview(descriptionDegreesLabel)
-        mainView.addSubview(timeLabel)
-        mainView.addSubview(clockImage)
-        
-        // добаволю жест и во вьюмодель добавить кложер (nullable)
-        // MARK: - Constraints
-        
-        mainView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(5)
-        }
-        cityNameLabel.snp.makeConstraints { make in
-            make.left.equalTo(mainView.snp.left).offset(10)
-            make.right.equalTo(mainView.snp.right).offset(-15)
-            make.top.equalTo(mainView.snp.top).offset(15)
-        }
-        
-        degreesLabel.snp.makeConstraints { make in
-            make.left.equalTo(mainView.snp.left).offset(10)
-            make.right.equalTo(mainView.snp.right).offset(-15)
-            make.top.equalTo(cityNameLabel.snp.bottom).offset(5)
-        }
-        
-        weatherImage.snp.makeConstraints { make in
-            make.left.equalTo(mainView.snp.left).offset(10)
-            make.top.equalTo(degreesLabel.snp.bottom).offset(5)
-        }
-        
-        descriptionWeatherLabel.snp.makeConstraints { make in
-            make.left.equalTo(mainView.snp.left).offset(10)
-            make.top.equalTo(weatherImage.snp.bottom).offset(5)
-        }
-        descriptionDegreesLabel.snp.makeConstraints { make in
-            make.left.equalTo(mainView.snp.left).offset(10)
-            make.top.equalTo(descriptionWeatherLabel.snp.bottom).offset(5)
-            make.bottom.equalTo(mainView.snp.bottom).offset(-5)
-        }
-        
-        timeLabel.snp.makeConstraints { make in
-            make.right.equalTo(mainView.snp.right).offset(-10)
-            make.bottom.equalTo(mainView.snp.bottom).offset(-10)
-        }
-        
-        clockImage.snp.makeConstraints { make in
-            make.centerY.equalTo(timeLabel.snp.centerY)
-            make.right.equalTo(timeLabel.snp.left).offset(-5)
-        }
-    }
-}

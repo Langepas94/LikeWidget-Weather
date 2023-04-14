@@ -44,12 +44,9 @@ extension ResultTableCitiesViewController: UITableViewDataSource, UITableViewDel
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableView", for: indexPath)
         var config = cell.defaultContentConfiguration()
         config.text = filteredNames[indexPath.row]
-
         cell.selectionStyle = .none
-
         cell.contentConfiguration = config
         cell.textLabel?.text = filteredNames[indexPath.row]
-        
         cell.backgroundColor = .backColor?.withAlphaComponent(0.3)
         return cell
     }
@@ -66,8 +63,6 @@ extension ResultTableCitiesViewController: UITableViewDataSource, UITableViewDel
         vc.popoverPresentationController?.sourceRect = self.tableView.rectForRow(at: indexPath)
         vc.popoverPresentationController?.sourceView = self.tableView
             present(vc, animated: true)
-        
-        
     }
     
 }
