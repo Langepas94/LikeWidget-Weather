@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class TopFilteredView: UIView {
+class FilterNavigationTopView: UIView {
     
     private let filterLabel: UILabel = {
         let label = UILabel()
@@ -28,7 +28,6 @@ class TopFilteredView: UIView {
         butt.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         butt.setTitleColor(.white, for: .normal)
         butt.translatesAutoresizingMaskIntoConstraints = false
-//        butt.addTarget(self, action: #selector(applyChanges), for: .touchUpInside)
         butt.setTitleColor(.lightGray, for: .highlighted)
         return butt
     }()
@@ -41,8 +40,6 @@ class TopFilteredView: UIView {
         butt.setTitleColor(.white, for: .normal)
         butt.setTitleColor(.lightGray, for: .disabled)
         butt.translatesAutoresizingMaskIntoConstraints = false
-//        var config = UIButton.Configuration.tinted()
-//        butt.configuration = config
         return butt
     }()
     
@@ -70,13 +67,8 @@ class TopFilteredView: UIView {
             make.width.equalTo(70)
             make.height.equalToSuperview()
         }
-        
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-
 }

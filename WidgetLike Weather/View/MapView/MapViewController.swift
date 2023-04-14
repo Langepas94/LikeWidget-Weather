@@ -22,12 +22,15 @@ class MapViewController: UIViewController {
     
     var favoriteList: [String] = []
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: Notification.Name("add favorite"), object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(refresh),
+            name: Notification.Name("add favorite"),
+            object: nil)
+        
         view.backgroundColor = .green
         setupUI()
         map.delegate = self
@@ -41,8 +44,9 @@ class MapViewController: UIViewController {
     }
     
     func annotationsCreator() {
-        self.favoriteList = CitiesService.shared.favorites
-        CitiesService.shared.favorites.forEach { city in
+        self.favoriteList = DatabaseService.shared.allFavorites()
+        DatabaseService.shared.allFavorites()
+            .forEach { city in
             self.network.fetchData(requestType: .city(city: city)) { result in
                 switch result {
                 case .success(let data ):
@@ -54,16 +58,12 @@ class MapViewController: UIViewController {
                         point.coordinate = CLLocationCoordinate2D(latitude: annotationsLat ?? 0.0, longitude: annotationsLon ?? 0.0)
                         self.pointAnnotationsArray.append(point)
                         self.map.addAnnotation(point)
-                       
                     }
-                    
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
         }
-        
-        
     }
 }
 
@@ -82,8 +82,6 @@ extension MapViewController {
         }
     }
 }
-extension MapViewController: MKMapViewDelegate {
-    
-}
+extension MapViewController: MKMapViewDelegate {}
 
 

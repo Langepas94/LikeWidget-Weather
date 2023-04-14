@@ -13,7 +13,7 @@ enum BarIcon {
     case fill
 }
 
-extension MainScreenViewController {
+extension MainScreenWithCollectinViewController {
     func setNavigationItem(bool: Bool)  {
         
         var item = UIBarButtonItem()

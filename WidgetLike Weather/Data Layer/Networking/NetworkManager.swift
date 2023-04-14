@@ -30,53 +30,40 @@ class NetworkManager {
         
         switch requestType {
         case .city(let city):
-			urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            
         case .location(let latitude, let longitude):
-			urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&apikey=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&apikey=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            
         case .localeList:
             guard let path = Bundle.main.path(forResource: "city.list", ofType: "json") else { return }
-           
-             urlString = "\(path)"
             
-            print(path)
+            urlString = "\(path)"
         }
-        
-        
-       
-       guard let url = URL(string: urlString) else {
-           print(urlString)
+
+        guard let url = URL(string: urlString) else {
             completion(.failure(ResultError.invalidUrl))
-                    return
-                }
-        URLSession.shared.dataTask(with: url) { data, _, error in
+            return
+        }
+        let task = URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
-                            completion(.failure(error))
-                            return
-                        }
+                completion(.failure(error))
+                return
+            }
             guard let data = data else {
-                           completion(.failure(ResultError.missingData))
-                           return
-                       }
+                completion(.failure(ResultError.missingData))
+                return
+            }
             do {
-				var jsonStr: String?
-				if var obj = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed),
-				   let data = try? JSONSerialization.data(withJSONObject: obj, options: [.fragmentsAllowed, .withoutEscapingSlashes , .prettyPrinted]),
-				   let string = String(data: data, encoding: .utf8) {
-					jsonStr = string
-				} else {
-					jsonStr = String(data: data, encoding: .utf8)
-				}
-				print(jsonStr ?? "No data")
                 let result = try JSONDecoder().decode(WeatherDataModel.self, from: data)
-                            completion(.success(result))
+                completion(.success(result))
                 
-                        } catch {
-                            completion(.failure(error))
-							print(error)
-                        }
-        }.resume()
+            } catch {
+                completion(.failure(error))
+                print(error)
+            }
+        }
+        task.resume()
     }
-    
-    
 }
 

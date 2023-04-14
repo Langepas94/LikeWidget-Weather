@@ -10,13 +10,12 @@ import UIKit
 import SnapKit
 import Combine
 
-class AddCityScreen: UIViewController {
+class AddCityViewController: UIViewController {
     
     let mainCityLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20, weight: .bold)
-//        label.textAlignment = .center
         return label
     }()
     
@@ -35,15 +34,12 @@ class AddCityScreen: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.text = ""
-//        label.textAlignment = .center
         label.font = .systemFont(ofSize: 37)
         return label
     }()
     
     private let weatherImage: UIImageView = {
         let image = UIImageView()
-//        image.image = UIImage(named: "01n")
-//        image.contentMode = .center
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
@@ -71,43 +67,43 @@ class AddCityScreen: UIViewController {
     var callCity: ((String?) -> ())?
     var titleCity: String?
     var network = NetworkManager()
+    var dataArray: CellDataForViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         actionButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        mainCityLabel.text = titleCity?.split(separator: "|")[1].trimmingCharacters(in: .whitespaces) ?? ""
+        mainCityLabel.text = titleCity ?? ""
         getData()
         
     }
     
+    func configurePopView(item: WeatherDataModel) {
+        let data = CustomWeatherModelConvert(currentData: item)!
+        self.degreesLabel.text = data.degrees
+        self.weatherImage.image = UIImage(named: data.icon ?? "")
+        self.descriptionWeatherLabel.text = data.descriptionWeather
+    }
+    
     @objc func buttonAction() {
-		let name = titleCity!.split(separator: "|")[1].trimmingCharacters(in: .whitespaces)
-		CitiesService.shared.saveFavorite(name)
-			.sink { _ in
-				
-			} receiveValue: { _ in
-				CitiesService.shared.favoritesAppender.send(name)
-			}
-			.store(in: &cancellables)
+		let name = titleCity!
+        DatabaseService.shared.addToFavorite(city: dataArray!)
+        DatabaseService.shared.favoriteWorker.send(name)
+        NotificationCenter.default.post(
+            name: Notification.Name("add favorite"),
+            object: nil)
         
-        NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
-
         self.dismiss(animated: true)
     }
     
     func getData() {
-        self.network.fetchData(requestType: .city(city: titleCity?.split(separator: "|")[1].trimmingCharacters(in: .whitespaces) ?? "")) { result in
+        self.network.fetchData(requestType: .city(city: titleCity ?? "")) { result in
             switch result {
-                
             case .success(let data):
-                
                 DispatchQueue.main.async {
-                    self.degreesLabel.text = String(data.list![0].main?.temp ?? 0.0)
-                    self.weatherImage.image = UIImage(named: data.list?[0].weather?[0].icon ?? "")
-                    self.descriptionWeatherLabel.text = data.list?[0].weather?[0].description ?? ""
+                    self.configurePopView(item: data)
+                    self.dataArray = CellDataForViewModel(currentData: data)
                 }
-                
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -115,8 +111,9 @@ class AddCityScreen: UIViewController {
     }
 }
 
-extension AddCityScreen {
+extension AddCityViewController {
     func setupUI() {
+        
         view.addSubview(mainCityLabel)
         view.addSubview(actionButton)
         view.addSubview(degreesLabel)
@@ -125,14 +122,10 @@ extension AddCityScreen {
         view.addSubview(descriptionDegreesLabel)
         view.backgroundColor = .white
         
-        
-        
-        
         actionButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.width.equalTo(100)
             make.trailing.equalToSuperview().offset(-6)
-            
         }
         mainCityLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
@@ -148,11 +141,9 @@ extension AddCityScreen {
             make.leading.equalTo(weatherImage.snp.trailing).offset(12)
         }
         
-        
         descriptionWeatherLabel.snp.makeConstraints { make in
             make.bottom.equalToSuperview().offset(-16)
             make.leading.equalTo(weatherImage.snp.leading)
         }
-        
     }
 }
