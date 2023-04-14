@@ -101,7 +101,6 @@ class DetailCitySomeView: UIView {
         self.degreesLabel.text = String(item.degrees) + "°"
         self.descriptionWeatherLabel.text = item.description
         self.weatherImage.image = UIImage(named: item.icon)
-
     }
 }
 

@@ -8,9 +8,8 @@
 import Foundation
 import UIKit
 
-struct CellDataModel {
+struct CellDataForViewModel {
      
-    
         let cityName: String?
         let degrees: Int?
         let icon: String?

@@ -86,7 +86,7 @@ class GeoWeatherCellOnMainView: UICollectionViewCell {
         self.weatherImage.image = UIImage(named: icon ?? "")
     }
     
-    func configure(data: CustomWeatherCellModel) {
+    func configure(data: CustomWeatherModelConvert) {
         self.cityNameLabel.text = data.city
         self.degreesLabel.text = data.degrees + "°"
         self.descriptionWeatherLabel.text = data.descriptionWeather

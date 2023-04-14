@@ -25,9 +25,7 @@ class ResultTableCitiesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
         setupUi()
-        
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -41,7 +39,10 @@ extension ResultTableCitiesViewController: UITableViewDataSource, UITableViewDel
     
  // MARK: - Setup Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableView", for: indexPath)
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "TableView",
+            for: indexPath)
+        
         var config = cell.defaultContentConfiguration()
         config.text = filteredNames[indexPath.row]
         cell.selectionStyle = .none
@@ -64,7 +65,6 @@ extension ResultTableCitiesViewController: UITableViewDataSource, UITableViewDel
         vc.popoverPresentationController?.sourceView = self.tableView
             present(vc, animated: true)
     }
-    
 }
 
 extension ResultTableCitiesViewController: UIPopoverPresentationControllerDelegate {

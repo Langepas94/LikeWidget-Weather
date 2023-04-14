@@ -10,7 +10,7 @@ import Foundation
 class CellCityViewModel {
     
     
-    private let cityItem: CellDataModel
+    private let cityItem: CellDataForViewModel
     
     var cityName: String {
         return cityItem.cityName ?? ""
@@ -34,7 +34,7 @@ class CellCityViewModel {
     
     var timeLabels: String?
     
-    init(item: CellDataModel) {
+    init(item: CellDataForViewModel) {
         self.cityItem = item
     }
     

@@ -9,7 +9,6 @@ import Foundation
 
 class FilterDegreesService {
     
-    
     private var filteredNum: String = "0"  {
         willSet {
             self.filteredNum = newValue
@@ -18,8 +17,7 @@ class FilterDegreesService {
     
     static let shared = FilterDegreesService()
     
-    private init () {
-    }
+    private init () {}
     
     public func pasteToFilteredNum(num: String) {
         var result = Int(num)!

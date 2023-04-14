@@ -88,7 +88,9 @@ class WeatherCellOnMainView: UICollectionViewCell {
         return label
     }()
     
-    let longPress = UILongPressGestureRecognizer()
+    private let longPress = UILongPressGestureRecognizer()
+    var isDeletable = false
+    var longPressClosure: (() -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -105,7 +107,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         
         contentView.addGestureRecognizer(longPress)
         longPress.addTarget(self, action: #selector(longTap))
-        longPress.isEnabled = false
+//        longPress.isEnabled = false
     }
     
     override func layoutSubviews() {
@@ -137,7 +139,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         self.descriptionWeatherLabel.text = cityItemModel.description
         self.weatherImage.image = UIImage(named: cityItemModel.icon)
         self.timezone = TimeZone(secondsFromGMT: cityItemModel.timezone)
-        
+        self.longPress.isEnabled = isDeletable
         NotificationCenter.default.addObserver(self, selector: #selector(updateTime), name: Notification.Name("time"), object: nil)
         
     }
@@ -147,7 +149,8 @@ class WeatherCellOnMainView: UICollectionViewCell {
     }
     
     @objc func longTap(_ sender: UILongPressGestureRecognizer) {
-        print("mem")
+        guard sender.state == .began else { return }
+        self.longPressClosure?()
     }
     
     @objc func updateTime() {

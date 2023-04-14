@@ -16,7 +16,6 @@ class AddCityViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 20, weight: .bold)
-//        label.textAlignment = .center
         return label
     }()
     
@@ -68,7 +67,8 @@ class AddCityViewController: UIViewController {
     var callCity: ((String?) -> ())?
     var titleCity: String?
     var network = NetworkManager()
-    var dataArray: CellDataModel?
+    var dataArray: CellDataForViewModel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -78,11 +78,21 @@ class AddCityViewController: UIViewController {
         
     }
     
+    func configurePopView(item: WeatherDataModel) {
+        let data = CustomWeatherModelConvert(currentData: item)!
+        self.degreesLabel.text = data.degrees
+        self.weatherImage.image = UIImage(named: data.icon ?? "")
+        self.descriptionWeatherLabel.text = data.descriptionWeather
+    }
+    
     @objc func buttonAction() {
 		let name = titleCity!
         DatabaseService.shared.addToFavorite(city: dataArray!)
         DatabaseService.shared.favoriteWorker.send(name)
-        NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
+        NotificationCenter.default.post(
+            name: Notification.Name("add favorite"),
+            object: nil)
+        
         self.dismiss(animated: true)
     }
     
@@ -91,12 +101,9 @@ class AddCityViewController: UIViewController {
             switch result {
             case .success(let data):
                 DispatchQueue.main.async {
-                    self.degreesLabel.text = String(data.list![0].main?.temp ?? 0.0)
-                    self.weatherImage.image = UIImage(named: data.list?[0].weather?[0].icon ?? "")
-                    self.descriptionWeatherLabel.text = data.list?[0].weather?[0].description ?? ""
-                    self.dataArray = CellDataModel(currentData: data)
+                    self.configurePopView(item: data)
+                    self.dataArray = CellDataForViewModel(currentData: data)
                 }
-                
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -106,6 +113,7 @@ class AddCityViewController: UIViewController {
 
 extension AddCityViewController {
     func setupUI() {
+        
         view.addSubview(mainCityLabel)
         view.addSubview(actionButton)
         view.addSubview(degreesLabel)
@@ -137,6 +145,5 @@ extension AddCityViewController {
             make.bottom.equalToSuperview().offset(-16)
             make.leading.equalTo(weatherImage.snp.leading)
         }
-        
     }
 }

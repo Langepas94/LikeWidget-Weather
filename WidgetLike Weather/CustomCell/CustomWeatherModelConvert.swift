@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct CustomWeatherCellModel {
+struct CustomWeatherModelConvert {
     let city: String
     let degrees: String
     let descriptionWeather: String

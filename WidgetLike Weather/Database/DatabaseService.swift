@@ -21,14 +21,12 @@ class DatabaseService {
     
     var network = NetworkManager()
     
-    
-    
     let db: Connection = {
         let path = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .userDomainMask, true
         ).first!
         do {
-         return try Connection("\(path)/cities.db")
+            return try Connection("\(path)/cities.db")
         } catch {
             fatalError()
         }
@@ -39,7 +37,7 @@ class DatabaseService {
         
         var resultArray: [String] = []
         do {
-
+            
             let isFavorite = Expression<Bool>("isFavorite")
             let name = Expression<String>("City")
             let table = Table(CityTables.base.rawValue)
@@ -56,14 +54,11 @@ class DatabaseService {
         return resultArray
     }
     
-    
-    
-    public func addToFavorite(city: CellDataModel) {
+    public func addToFavorite(city: CellDataForViewModel) {
         
-       
         do {
             let id = Expression<Int>("id")
-          
+            
             let name = Expression<String>("City")
             let degrees = Expression<String>("degrees")
             let icon = Expression<String>("icon")
@@ -72,9 +67,6 @@ class DatabaseService {
             let table = Table(CityTables.favorites.rawValue)
             
             try db.run(table.insert(name <- city.cityName ?? "", degrees <- String(city.degrees ?? 0), icon <- city.icon ?? "", descriptionDegrees <- city.descriptionDegrees ?? "", timeZone <- city.timeZone ?? 0))
-       
-            
-            
         } catch {
             print(error)
         }
@@ -101,7 +93,7 @@ class DatabaseService {
         var result: [String] = []
         
         do {
-          
+            
             let name = Expression<String>("City")
             let table = Table(CityTables.favorites.rawValue)
             
@@ -121,7 +113,6 @@ class DatabaseService {
         var result: [CellCityViewModel] = []
         
         do {
-            
             let name = Expression<String>("City")
             let degrees = Expression<String>("degrees")
             let icon = Expression<String>("icon")
@@ -131,7 +122,7 @@ class DatabaseService {
             
             
             for city in try db.prepare(table) {
-                let viewModelItem = CellCityViewModel(item: CellDataModel(cityName: city[name], degrees: Int(city[degrees]), icon: city[icon], descriptionDegrees: city[descriptionDegrees], timeZone: city[timeZone]))
+                let viewModelItem = CellCityViewModel(item: CellDataForViewModel(cityName: city[name], degrees: Int(city[degrees]), icon: city[icon], descriptionDegrees: city[descriptionDegrees], timeZone: city[timeZone]))
                 result.append(viewModelItem)
             }
             
@@ -145,7 +136,6 @@ class DatabaseService {
         var resultArray: [CellCityViewModel] = []
         
         do {
-            
             let name = Expression<String>("City")
             let degrees = Expression<String>("degrees")
             let icon = Expression<String>("icon")
@@ -153,13 +143,12 @@ class DatabaseService {
             let timeZone = Expression<Int>("timeZone")
             let table = Table(CityTables.favorites.rawValue)
             
-            
             for city in try db.prepare(table) {
                 print("mamacita \(city)")
                 self.network.fetchData(requestType: .city(city: city[name])) { [weak self] result in
                     switch result {
                     case .success(let data):
-                        let viewModelItem = CellCityViewModel(item: CellDataModel(currentData: data)!)
+                        let viewModelItem = CellCityViewModel(item: CellDataForViewModel(currentData: data)!)
                         let nameCity = viewModelItem.cityName
                         let formatter = NumberFormatter()
                         formatter.minimumFractionDigits = 0
@@ -177,14 +166,10 @@ class DatabaseService {
                         print(err.localizedDescription)
                     }
                 }
-                
-           
             }
-            
         } catch {
             print(error)
         }
-        
     }
     
     public func filteringFavorites(degree: String) -> [CellCityViewModel] {
@@ -200,9 +185,8 @@ class DatabaseService {
             
             let filter = table.filter(degrees >= degree)
             
-            
             for i in try db.prepare(filter) {
-                let viewModelItem = CellCityViewModel(item: CellDataModel(cityName: i[name], degrees: Int(i[degrees]), icon: i[icon], descriptionDegrees: i[descriptionDegrees], timeZone: i[timeZone]))
+                let viewModelItem = CellCityViewModel(item: CellDataForViewModel(cityName: i[name], degrees: Int(i[degrees]), icon: i[icon], descriptionDegrees: i[descriptionDegrees], timeZone: i[timeZone]))
                 result.append(viewModelItem)
             }
             
@@ -220,17 +204,12 @@ class DatabaseService {
             let id = Expression<Int>("id")
             let name = Expression<String>("City")
             let deletingCity = table.filter(name.like("\(city)%"))
-
-
-            try db.run(deletingCity.delete())
-     
-        } catch {
             
+            try db.run(deletingCity.delete())
+            
+        } catch {
             print(error.localizedDescription)
         }
-        
-        
-        
     }
     
     init(network: NetworkManager = NetworkManager(), favoriteWorker: PassthroughSubject<String, Never> = PassthroughSubject<String, Never>()) {

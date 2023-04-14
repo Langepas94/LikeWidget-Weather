@@ -20,12 +20,15 @@ class MainScreenWithCollectinViewController: UIViewController {
     }()
     
     private lazy var mainCollection: UICollectionView = {
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: createCompositionalLayout())
+        let collection = UICollectionView(frame: .zero,
+                                          collectionViewLayout: createCompositionalLayout())
         collection.dataSource = self
         collection.delegate = self
         collection.translatesAutoresizingMaskIntoConstraints = false
-        collection.register(WeatherCellOnMainView.self, forCellWithReuseIdentifier: WeatherCellOnMainView.cellId)
-        collection.register(GeoWeatherCellOnMainView.self, forCellWithReuseIdentifier: GeoWeatherCellOnMainView.cellId)
+        collection.register(WeatherCellOnMainView.self,
+                            forCellWithReuseIdentifier: WeatherCellOnMainView.cellId)
+        collection.register(GeoWeatherCellOnMainView.self,
+                            forCellWithReuseIdentifier: GeoWeatherCellOnMainView.cellId)
         collection.showsVerticalScrollIndicator = false
         return collection
     }()
@@ -33,9 +36,8 @@ class MainScreenWithCollectinViewController: UIViewController {
     var isCitiesLoaded = false
     
     var isFiltering = false
-  
+    
     var cancellables: Set<AnyCancellable> = []
-    var point: CGPoint?
     private var network = NetworkManager()
     private var searchPublisher = PassthroughSubject<String, Never>()
     
@@ -74,8 +76,8 @@ class MainScreenWithCollectinViewController: UIViewController {
         case .authorized:
             break
         }
-        setupNavigationItem()
         locationManaging.delegate = self
+        setupNavigationItem()
         
         //        locationManaging.requestWhenInUseAuthorization()
         DispatchQueue.global().async {
@@ -84,12 +86,8 @@ class MainScreenWithCollectinViewController: UIViewController {
                 self.locationManaging.startUpdatingLocation()
             }
         }
-        
+
         setupUI()
-//        let longPress = UILongPressGestureRecognizer()
-//        longPress.addTarget(self, action: #selector(longDeleteItem))
-////        self.mainCollection.addGestureRecognizer(longPress)
-        
         
         searchPublisher
             .debounce(for: 0.1, scheduler: DispatchQueue.main)
@@ -142,16 +140,12 @@ class MainScreenWithCollectinViewController: UIViewController {
         DataIterator.shared.preload {  closure in
             DispatchQueue.main.async {
                 self.cellModel = closure
-                
                 self.mainCollection.reloadData()
             }
         }
     }
-    
-
-    
-    
 }
+
 // MARK: - setupUI func
 extension MainScreenWithCollectinViewController {
     func setupUI() {
@@ -178,27 +172,30 @@ extension MainScreenWithCollectinViewController {
 // MARK: - UICollectionViewDataSource()
 extension MainScreenWithCollectinViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         cellModel.count + 1
-        
-        
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // MARK: - geoCell
-        
         if indexPath.row == 0 {
-            let geoCell = mainCollection.dequeueReusableCell(withReuseIdentifier: GeoWeatherCellOnMainView.cellId, for: indexPath) as! GeoWeatherCellOnMainView
-            
+            let geoCell = mainCollection.dequeueReusableCell(
+                withReuseIdentifier: GeoWeatherCellOnMainView.cellId,
+                for: indexPath) as! GeoWeatherCellOnMainView
             
             if let location = locationManaging.location {
                 self.lat = location.coordinate.latitude
                 self.lon = location.coordinate.longitude
             }
             
-            geoCell.configureDefault(city: "Loading", degrees: "loading", descriptionWeather: "", descrptionDegrees: "", icon: "")
+            geoCell.configureDefault(city: "Loading",
+                                     degrees: "loading",
+                                     descriptionWeather: "",
+                                     descrptionDegrees: "",
+                                     icon: "")
             
             self.network.fetchData(requestType: .location(latitude: lat ?? 00.00, longitude: lon ?? 00.00)) { [weak self] result in
                 
@@ -206,22 +203,31 @@ extension MainScreenWithCollectinViewController: UICollectionViewDataSource {
                 case .success(let data):
                     DispatchQueue.main.async {
                         
-                        guard let currentData = CustomWeatherCellModel(currentData: data) else { return }
+                        guard let currentData = CustomWeatherModelConvert(currentData: data) else { return }
                         geoCell.configure(data: currentData)
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
                     DispatchQueue.main.async {
-                        geoCell.configureDefault(city: "Fail load", degrees: "", descriptionWeather: "", descrptionDegrees: "", icon: "")
+                        geoCell.configureDefault(city: "Fail load",
+                                                 degrees: "",
+                                                 descriptionWeather: "",
+                                                 descrptionDegrees: "",
+                                                 icon: "")
                     }
                 }
             }
-            
             return geoCell
         }
         
-        let cell = mainCollection.dequeueReusableCell(withReuseIdentifier: WeatherCellOnMainView.cellId, for: indexPath) as! WeatherCellOnMainView
-        
+        let cell = mainCollection.dequeueReusableCell(
+            withReuseIdentifier: WeatherCellOnMainView.cellId,
+            for: indexPath) as! WeatherCellOnMainView
+        cell.isDeletable = true
+        cell.longPressClosure = {
+            let index = self.mainCollection.indexPath(for: cell)!
+            self.longDelete(index: index)
+        }
         cell.cityItemModel = cellModel[indexPath.row - 1]
         return cell
     }
@@ -231,15 +237,14 @@ extension MainScreenWithCollectinViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let vc = DetailCityViewController()
-
+        
         vc.currentPageNumber = indexPath.row - 1
-
+        
         vc.cityItemModel = cellModel
-       
+        
         self.present(vc, animated: true)
     }
 }
-
 
 // MARK: Search Updating
 extension MainScreenWithCollectinViewController: UISearchResultsUpdating {
@@ -256,11 +261,9 @@ extension MainScreenWithCollectinViewController: UISearchResultsUpdating {
 extension MainScreenWithCollectinViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         let index = IndexPath(item: 0, section: 0)
         self.mainCollection.reloadItems(at: [index])
     }
-    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
     }
@@ -276,10 +279,9 @@ extension MainScreenWithCollectinViewController {
         let vc = SettingsViewController()
         vc.completion = {[weak self] bool, int in
             guard let self = self else { return }
-            DataIterator.shared.filtering(degree: String(int)) {  closure in
+            DataIterator.shared.filtering(degree: String(int)) { closure in
                 DispatchQueue.main.async {
                     self.cellModel = closure
-                    
                     self.mainCollection.reloadData()
                 }
             }
@@ -292,34 +294,28 @@ extension MainScreenWithCollectinViewController {
         }
         self.present(vc, animated: true)
     }
-    
 }
-// пробросить из ячейки лонгтап и обработать в контроллере
-// привести в порядок
 
 // MARK: - actions
 extension MainScreenWithCollectinViewController {
-    @objc func longDeleteItem(sender: UILongPressGestureRecognizer) {
-        guard sender.state == .began else { return }
-        let point = sender.location(in: self.mainCollection)
-        let indexPath = self.mainCollection.indexPathForItem(at: point)
-        let item = indexPath!.item
-        let section = indexPath!.section
+    func longDelete(index: IndexPath) {
         let names = DatabaseService.shared.allFavorites()
-        let indexNames = names[indexPath!.item - 1]
+        let indexNames = names[index.item - 1]
+        let alert = UIAlertController(title: "Deleting city",
+                                      message: "City was remove from favorites",
+                                      preferredStyle: .alert)
         
-        let alert = UIAlertController(title: "Deleting city", message: "City was remove from favorites", preferredStyle: .alert)
-        
-        let yesAction = UIAlertAction(title: "Delete", style: .destructive) { action in
+        let yesAction = UIAlertAction(title: "Delete",
+                                      style: .destructive) { action in
             
-            print("kuka \(indexNames)")
             DatabaseService.shared.removeFromFavorite(city: indexNames)
             
             self.configureViewModels()
             NotificationCenter.default.post(name: Notification.Name("add favorite"), object: nil)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Cancel",
+                                         style: .cancel)
         alert.addAction(yesAction)
         alert.addAction(cancelAction)
         self.present(alert, animated: true)
@@ -330,7 +326,9 @@ extension MainScreenWithCollectinViewController {
 extension MainScreenWithCollectinViewController {
     func setupRefresh() {
         self.mainCollection.refreshControl = UIRefreshControl()
-        self.mainCollection.refreshControl?.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        self.mainCollection.refreshControl?.addTarget(self,
+                                                      action: #selector(refreshData),
+                                                      for: .valueChanged)
     }
     
     @objc func refreshData() {

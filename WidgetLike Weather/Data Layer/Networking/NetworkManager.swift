@@ -31,8 +31,10 @@ class NetworkManager {
         switch requestType {
         case .city(let city):
             urlString = "https://api.openweathermap.org/data/2.5/forecast?q=\(city)&appid=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            
         case .location(let latitude, let longitude):
             urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&apikey=\(apiKey)&units=metric".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            
         case .localeList:
             guard let path = Bundle.main.path(forResource: "city.list", ofType: "json") else { return }
             

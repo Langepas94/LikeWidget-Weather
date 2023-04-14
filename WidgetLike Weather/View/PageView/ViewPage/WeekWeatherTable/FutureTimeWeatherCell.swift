@@ -37,7 +37,6 @@ class FutureTimeWeatherCell: UITableViewCell {
         return label
     }()
     
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUIs()
@@ -81,17 +80,18 @@ extension FutureTimeWeatherCell {
        
         timeLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(55)
-//            make.width.equalTo(30)
             make.height.equalTo(50)
             make.centerY.equalToSuperview()
-            
         }
+        
         UIView.animate(withDuration: 1) {
             self.timeLabel.alpha = 1
         }
+        
         weatherImage.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
         }
+        
         degreeLabel.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-55)
             make.height.equalTo(50)

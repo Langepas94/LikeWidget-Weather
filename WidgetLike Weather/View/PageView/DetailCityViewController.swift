@@ -59,11 +59,9 @@ class DetailCityViewController: UIViewController {
     @objc func segmentScroll() {
         let indexOfTouch = pageControl.currentPage
         
-        
         var frame = mainView[indexOfTouch].frame
       
         scrollView.setContentOffset(CGPoint(x: frame.origin.x, y: 0), animated: true)
-        
     }
     func addPages(count: Int) {
         for _ in 1...count {
@@ -77,7 +75,6 @@ class DetailCityViewController: UIViewController {
         for (index, city) in mainView.enumerated() {
             city.configure(item: cityItemModel![index])
         }
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -86,7 +83,6 @@ class DetailCityViewController: UIViewController {
             view.frame.size.height = scrollView.bounds.height
         }
     }
-
 }
 
 extension DetailCityViewController {
@@ -95,7 +91,9 @@ extension DetailCityViewController {
         view.backgroundColor = .white
         view.addSubview(pageControl)
         view.addSubview(scrollView)
+        
         scrollView.contentSize = CGSize(width: view.frame.width * CGFloat(mainView.count), height: view.frame.height - 200 )
+        
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaInsets.top)
             make.leading.equalToSuperview()
@@ -114,7 +112,6 @@ extension DetailCityViewController {
             scrollView.addSubview(view)
             padding += UIScreen.main.bounds.width
         }
-        
     }
 }
 

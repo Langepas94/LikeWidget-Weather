@@ -33,7 +33,12 @@ class SettingsViewController: UIViewController {
         let butt = UIButton()
         
         let config = UIImage.SymbolConfiguration(pointSize: 24)
-        butt.setImage(UIImage(systemName: "minus.circle", withConfiguration: config)?.withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
+        butt.setImage(UIImage(
+            systemName: "minus.circle",
+            withConfiguration: config)?
+            .withTintColor(.black, renderingMode: .alwaysOriginal),
+                      for: .normal)
+        
         butt.addTarget(self, action: #selector(minusButtonHolded), for: .touchDown)
         butt.addTarget(self, action: #selector(minusButtonUp), for: [.touchUpInside, .touchUpOutside])
         butt.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +48,11 @@ class SettingsViewController: UIViewController {
     private lazy var plusButton: UIButton = {
         let butt = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 24)
-        butt.setImage(UIImage(systemName: "plus.circle", withConfiguration: config)?.withRenderingMode(.alwaysOriginal).withTintColor(.black), for: .normal)
+        butt.setImage(UIImage(systemName: "plus.circle",
+                              withConfiguration: config)?
+            .withRenderingMode(.alwaysOriginal)
+            .withTintColor(.black), for: .normal)
+        
         butt.translatesAutoresizingMaskIntoConstraints = false
         butt.addTarget(self, action: #selector(plusButtonHolded), for: .touchDown)
         butt.addTarget(self, action: #selector(plusButtonUp), for: [.touchUpInside, .touchUpOutside])
@@ -226,7 +235,6 @@ extension SettingsViewController {
 
 extension SettingsViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
         
         guard CharacterSet(charactersIn: "0123456789").isSuperset(of: CharacterSet(charactersIn: string)) else {
             return false
