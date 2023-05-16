@@ -31,6 +31,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         view.layer.shadowRadius = 4
         view.layer.shadowOpacity = 0.08
         view.layer.masksToBounds = false
+        
         view.backgroundColor = .white
         return view
     }()
@@ -39,13 +40,14 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 21)
+        
         label.textAlignment = .left
         return label
     }()
     
     private let degreesLabel: UILabel = {
         let label = UILabel()
-        //        label.translatesAutoresizingMaskIntoConstraints = false
+                
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 43)
         return label
@@ -55,6 +57,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let image = UIImageView()
         image.image = UIImage(named: "01n")
         image.contentMode = .center
+        
         return image
     }()
     
@@ -62,6 +65,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
+        
         return label
     }()
     
@@ -69,6 +73,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont(name: "AppleSDGothicNeo-Medium", size: 13)
+        
         return label
     }()
     
@@ -76,6 +81,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         let image = UIImageView()
         let config = UIImage.SymbolConfiguration(pointSize: 15)
         image.image = UIImage(systemName: "clock", withConfiguration: config)?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        
         image.contentMode = .center
         return image
     }()
@@ -85,6 +91,7 @@ class WeatherCellOnMainView: UICollectionViewCell {
         label.textColor = .black
         label.numberOfLines = 2
         label.font = UIFont(name: "AppleSDGothicNeo-Light", size: 15)
+        
         return label
     }()
     
@@ -108,10 +115,13 @@ class WeatherCellOnMainView: UICollectionViewCell {
         contentView.addGestureRecognizer(longPress)
         longPress.addTarget(self, action: #selector(longTap))
 //        longPress.isEnabled = false
+        
     }
+    
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.frame = bounds
         mainView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0))
         
         cityNameLabel.frame = CGRect(x: 10, y: 15, width: mainView.frame.width, height: 22)

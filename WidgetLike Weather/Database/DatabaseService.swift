@@ -22,11 +22,16 @@ class DatabaseService {
     var network = NetworkManager()
     
     let db: Connection = {
-        let path = NSSearchPathForDirectoriesInDomains(
-            .documentDirectory, .userDomainMask, true
-        ).first!
+        let path = Bundle.main.bundlePath
+        // if u want use document directory or put your own database
+//        let path = NSSearchPathForDirectoriesInDomains(
+//            .documentDirectory, .userDomainMask, true
+//        ).first!
+
         do {
             return try Connection("\(path)/cities.db")
+
+            
         } catch {
             fatalError()
         }
@@ -144,7 +149,7 @@ class DatabaseService {
             let table = Table(CityTables.favorites.rawValue)
             
             for city in try db.prepare(table) {
-                print("mamacita \(city)")
+               
                 self.network.fetchData(requestType: .city(city: city[name])) { [weak self] result in
                     switch result {
                     case .success(let data):
@@ -217,10 +222,12 @@ class DatabaseService {
         self.favoriteWorker = favoriteWorker
         
         do {
-            let path = NSSearchPathForDirectoriesInDomains(
-                .documentDirectory, .userDomainMask, true
-            ).first!
+//            let path = NSSearchPathForDirectoriesInDomains(
+//                .documentDirectory, .userDomainMask, true
+//            ).first!
             
+            let path = Bundle.main.bundlePath
+
             let table = Table(CityTables.base.rawValue)
         } catch {
             

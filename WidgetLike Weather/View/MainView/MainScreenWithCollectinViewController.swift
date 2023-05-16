@@ -58,8 +58,8 @@ class MainScreenWithCollectinViewController: UIViewController {
     private var cellModel: [CellCityViewModel] = []
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
+        print(NSHomeDirectory())
         configureViewModels()
         setupRefresh()
         switch locationManaging.authorizationStatus {
@@ -88,6 +88,10 @@ class MainScreenWithCollectinViewController: UIViewController {
         }
 
         setupUI()
+       
+        
+        
+        
         
         searchPublisher
             .debounce(for: 0.1, scheduler: DispatchQueue.main)

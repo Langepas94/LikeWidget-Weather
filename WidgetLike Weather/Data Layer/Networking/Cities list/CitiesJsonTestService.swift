@@ -42,6 +42,7 @@ class CitiesJsonTestService {
             } receiveValue: { names in
                 self.favoritesAppender.send("")
             }
+            
             .store(in: &cancellables)
     }
     
