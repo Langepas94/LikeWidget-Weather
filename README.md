@@ -1,5 +1,8 @@
 # LikeWidget-Weather
 ### Simple weather app with widget like design.
+
+Данная api не дает список городов, дает только json файл со списком. Было решено перенести это в БД. Конкретная информация по городу берется из сети.
+
 Using SQLite swift and SQL database inside.
 Using free plan of API OpenWeatherMap
 Combine, UrlSession
