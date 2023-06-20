@@ -2,6 +2,7 @@
 ### Simple weather app with widget like design.
 
 Данная api не дает список городов, дает только json файл со списком. Было решено перенести это в БД. Конкретная информация по городу берется из сети.
+Программа показывает выбранные вами города на карте, вместе с температурой. 
 
 Using SQLite swift and SQL database inside.
 Using free plan of API OpenWeatherMap
